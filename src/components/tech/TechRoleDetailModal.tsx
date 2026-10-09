@@ -17,9 +17,11 @@ import { TECH_GROWTH_DATA } from "@/lib/scholarsync/growth";
 import { TECH_PORTFOLIO_PROOFS } from "@/lib/scholarsync/portfolio";
 import { TECH_ACTION_PLANS } from "@/lib/scholarsync/action-plans";
 
+type TabKey = "blueprint" | "reality" | "action" | "growth" | "portfolio";
+
 interface TechRoleDetailModalProps {
   career: TechCareer | null;
-  initialTab?: "blueprint" | "reality" | "action" | "growth" | "portfolio";
+  initialTab?: TabKey;
   onClose: () => void;
 }
 
@@ -28,9 +30,7 @@ export function TechRoleDetailModal({
   initialTab = "blueprint",
   onClose,
 }: TechRoleDetailModalProps) {
-  const [activeTab, setActiveTab] = useState<
-    "blueprint" | "reality" | "action" | "growth" | "portfolio"
-  >(initialTab);
+  const [activeTab, setActiveTab] = useState<TabKey>(initialTab);
 
   if (!career) return null;
 
@@ -78,16 +78,18 @@ export function TechRoleDetailModal({
 
         {/* Navigation Tabs Bar */}
         <div className="bg-white border-b-4 border-[#121212] px-4 sm:px-6 flex overflow-x-auto gap-2 py-2 shrink-0">
-          {[
-            { id: "blueprint", label: "01. BLUEPRINT ROADMAP" },
-            { id: "reality", label: "02. REALITY CHECK" },
-            { id: "portfolio", label: "03. PORTFOLIO PROOFS" },
-            { id: "growth", label: "04. CAREER EVOLUTION" },
-            { id: "action", label: "05. 7-DAY ACTION PLAN" },
-          ].map((tab) => (
+          {(
+            [
+              { id: "blueprint", label: "01. BLUEPRINT ROADMAP" },
+              { id: "reality", label: "02. REALITY CHECK" },
+              { id: "portfolio", label: "03. PORTFOLIO PROOFS" },
+              { id: "growth", label: "04. CAREER EVOLUTION" },
+              { id: "action", label: "05. 7-DAY ACTION PLAN" },
+            ] as const
+          ).map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
+              onClick={() => setActiveTab(tab.id)}
               className={`font-mono text-xs font-black uppercase px-3 py-2 border-2 border-[#121212] whitespace-nowrap transition ${
                 activeTab === tab.id
                   ? "bg-[#D02020] text-white shadow-[2px_2px_0px_0px_#121212]"

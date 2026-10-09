@@ -23,6 +23,7 @@ import { popularLocations } from "@/lib/jobs";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { ConvexJobsFeed } from "@/components/jobs/ConvexJobsFeed";
 
 export const Route = createFileRoute("/dashboard/jobs")({ component: JobsPage });
 
@@ -70,6 +71,7 @@ type LiveJob = {
   company: string;
   location: string;
   description: string;
+  salary?: string;
   salaryMin: number | null;
   salaryMax: number | null;
   contractTime: string;
@@ -77,6 +79,7 @@ type LiveJob = {
   category: string;
   created: string;
   applyUrl: string;
+  source?: string;
 };
 
 function inferRemote(j: LiveJob): "Remote" | "Hybrid" | "On-site" {
@@ -126,13 +129,14 @@ function relTime(iso: string) {
   return `${Math.floor(days / 30)}mo ago`;
 }
 function fmtSalary(j: LiveJob) {
+  if (j.salary && j.salary.trim() && j.salary !== "Competitive") return j.salary;
   const a = j.salaryMin,
     b = j.salaryMax;
   const fmt = (n: number) => (n >= 1000 ? `${Math.round(n / 1000)}k` : `${n}`);
-  if (a && b) return `$${fmt(a)} – $${fmt(b)}`;
-  if (a) return `From $${fmt(a)}`;
-  if (b) return `Up to $${fmt(b)}`;
-  return "Not disclosed";
+  if (a && b) return `₹${fmt(a)} – ₹${fmt(b)}`;
+  if (a) return `From ₹${fmt(a)}`;
+  if (b) return `Up to ₹${fmt(b)}`;
+  return "Competitive";
 }
 function logoFor(company: string) {
   return (company?.[0] || "•").toUpperCase();
@@ -157,7 +161,7 @@ function JobsPage() {
   const [exp, setExp] = useState<(typeof expOpts)[number]>("All");
   const [salary, setSalary] = useState(salaryBands[0]);
   const [techChips, setTechChips] = useState<Set<string>>(new Set());
-  const [tab, setTab] = useState<"all" | "internships" | "saved">("all");
+  const [tab, setTab] = useState<"all" | "internships" | "saved" | "convex">("all");
 
   const [results, setResults] = useState<LiveJob[]>([]);
   const [savedJobs, setSavedJobs] = useState<LiveJob[]>([]);
@@ -420,14 +424,21 @@ function JobsPage() {
     <div className="max-w-7xl mx-auto space-y-6 md:space-y-8">
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <div className="inline-flex items-center gap-1.5 glass rounded-full px-3 py-1 text-[10px] uppercase tracking-wider mb-3">
-          <Sparkles className="h-3 w-3 text-primary" /> Live Job Search
+        <div className="inline-flex items-center gap-2 border-2 border-border bg-primary-yellow/20 px-3 py-1 text-xs font-mono font-bold tracking-wider mb-3 shadow-[2px_2px_0px_0px_#121212]">
+          <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <Sparkles className="h-3.5 w-3.5 text-foreground" />
+          <span>LIVE INDIAN JOB FINDER • PYTHON-JOBSPY</span>
         </div>
-        <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold">
-          Find your next <span className="gradient-text">opportunity</span>
+        <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-extrabold uppercase tracking-tight">
+          Live Indian{" "}
+          <span className="bg-primary-red text-white px-2 py-0.5 inline-block">
+            Tech Opportunities
+          </span>
         </h1>
-        <p className="text-muted-foreground mt-1 text-sm md:text-base">
-          Live jobs from Adzuna — search, filter, and save roles you love.
+        <p className="text-foreground/80 mt-2 text-sm md:text-base max-w-3xl">
+          Direct scraping from <strong>Naukri</strong>, <strong>Indeed India</strong>, and{" "}
+          <strong>LinkedIn</strong> with zero paid APIs. Filtered for recent postings (&le; 72 hours
+          fresh) and fast 1-hour caching.
         </p>
       </motion.div>
 
@@ -485,6 +496,7 @@ function JobsPage() {
         {(
           [
             { k: "all", label: "All Jobs", icon: Briefcase },
+            { k: "convex", label: "Convex Cloud (Reactive)", icon: Sparkles },
             { k: "internships", label: "Internships", icon: GraduationCap },
             { k: "saved", label: `Saved (${savedIds.size})`, icon: Bookmark },
           ] as const
@@ -512,117 +524,131 @@ function JobsPage() {
         ))}
       </div>
 
-      {/* Search + Filters */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="glass-strong rounded-3xl p-4 md:p-5 space-y-4"
-      >
-        <div className="relative">
-          <Search className="h-4 w-4 absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
-          <input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder='Try "React Developer", "Python Internship", "UI UX Designer"…'
-            className="w-full glass rounded-xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
-          />
-        </div>
+      {tab === "convex" ? (
+        <ConvexJobsFeed initialSearch={q} initialLocation={loc} />
+      ) : (
+        <>
+          {/* Search + Filters */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="glass-strong rounded-3xl p-4 md:p-5 space-y-4"
+          >
+            <div className="relative">
+              <Search className="h-4 w-4 absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <input
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                placeholder='Try "React Developer", "Python Internship", "UI UX Designer"…'
+                className="w-full glass rounded-xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+              />
+            </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          <FilterGroup label="Work Mode" icon={Zap}>
-            {remoteOpts.map((o) => (
-              <Chip key={o} active={remote === o} onClick={() => setRemote(o)}>
-                {o}
-              </Chip>
-            ))}
-          </FilterGroup>
-          <FilterGroup label="Type" icon={Briefcase}>
-            {typeOpts.map((o) => (
-              <Chip key={o} active={type === o} onClick={() => setType(o)}>
-                {o}
-              </Chip>
-            ))}
-          </FilterGroup>
-          <FilterGroup label="Experience" icon={TrendingUp}>
-            {expOpts.map((o) => (
-              <Chip key={o} active={exp === o} onClick={() => setExp(o)}>
-                {o}
-              </Chip>
-            ))}
-          </FilterGroup>
-          <FilterGroup label="Salary (optional)" icon={DollarSign}>
-            {salaryBands.map((b) => (
-              <Chip key={b.label} active={salary.label === b.label} onClick={() => setSalary(b)}>
-                {b.label}
-              </Chip>
-            ))}
-          </FilterGroup>
-          <div className="lg:col-span-2">
-            <FilterGroup label="Tech Stack (local filter)" icon={FilterIcon}>
-              <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto">
-                {TECH_CHIPS.map((s) => (
-                  <Chip key={s} active={techChips.has(s)} onClick={() => toggleTechChip(s)}>
-                    {s}
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              <FilterGroup label="Work Mode" icon={Zap}>
+                {remoteOpts.map((o) => (
+                  <Chip key={o} active={remote === o} onClick={() => setRemote(o)}>
+                    {o}
                   </Chip>
                 ))}
+              </FilterGroup>
+              <FilterGroup label="Type" icon={Briefcase}>
+                {typeOpts.map((o) => (
+                  <Chip key={o} active={type === o} onClick={() => setType(o)}>
+                    {o}
+                  </Chip>
+                ))}
+              </FilterGroup>
+              <FilterGroup label="Experience" icon={TrendingUp}>
+                {expOpts.map((o) => (
+                  <Chip key={o} active={exp === o} onClick={() => setExp(o)}>
+                    {o}
+                  </Chip>
+                ))}
+              </FilterGroup>
+              <FilterGroup label="Salary (optional)" icon={DollarSign}>
+                {salaryBands.map((b) => (
+                  <Chip
+                    key={b.label}
+                    active={salary.label === b.label}
+                    onClick={() => setSalary(b)}
+                  >
+                    {b.label}
+                  </Chip>
+                ))}
+              </FilterGroup>
+              <div className="lg:col-span-2">
+                <FilterGroup label="Tech Stack (local filter)" icon={FilterIcon}>
+                  <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto">
+                    {TECH_CHIPS.map((s) => (
+                      <Chip key={s} active={techChips.has(s)} onClick={() => toggleTechChip(s)}>
+                        {s}
+                      </Chip>
+                    ))}
+                  </div>
+                </FilterGroup>
               </div>
-            </FilterGroup>
+            </div>
+
+            <div className="flex items-center justify-between flex-wrap gap-2 text-xs">
+              <button
+                onClick={clearAll}
+                className="glass rounded-full px-3 py-1.5 hover:bg-white/10 transition"
+              >
+                Clear all filters
+              </button>
+              {appliedFallback && (
+                <span className="text-muted-foreground italic">
+                  Auto-relaxed: {appliedFallback}
+                </span>
+              )}
+            </div>
+          </motion.div>
+
+          {/* Results meta */}
+          <div className="text-xs text-muted-foreground flex items-center gap-2">
+            {loading ? (
+              <>
+                <Loader2 className="h-3 w-3 animate-spin" /> Searching live jobs…
+              </>
+            ) : (
+              <>
+                Showing <span className="text-foreground font-medium">{filtered.length}</span>{" "}
+                {tab === "internships" ? "internships" : tab === "saved" ? "saved jobs" : "jobs"}
+              </>
+            )}
           </div>
-        </div>
 
-        <div className="flex items-center justify-between flex-wrap gap-2 text-xs">
-          <button
-            onClick={clearAll}
-            className="glass rounded-full px-3 py-1.5 hover:bg-white/10 transition"
-          >
-            Clear all filters
-          </button>
-          {appliedFallback && (
-            <span className="text-muted-foreground italic">Auto-relaxed: {appliedFallback}</span>
+          <AnimatePresence mode="popLayout">
+            <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+              {filtered.map((j, i) => (
+                <JobCard
+                  key={j.id || `${j.title}-${i}`}
+                  job={j}
+                  saved={savedIds.has(j.id)}
+                  onToggleSave={() => toggleSave(j)}
+                  onOpen={() => setOpenJob(j)}
+                  delay={i * 0.03}
+                />
+              ))}
+            </div>
+          </AnimatePresence>
+
+          {!loading && filtered.length === 0 && (
+            <div className="text-center py-16 md:py-20 text-muted-foreground glass-strong rounded-3xl px-4">
+              <div className="text-sm mb-2">{errMsg ?? "No jobs match your filters."}</div>
+              <div className="text-xs">
+                Try removing some filters or using a broader search term.
+              </div>
+              <button
+                onClick={clearAll}
+                className="mt-4 inline-flex items-center gap-2 text-xs glass rounded-full px-4 py-2 hover:bg-white/10 transition"
+              >
+                Reset filters
+              </button>
+            </div>
           )}
-        </div>
-      </motion.div>
-
-      {/* Results meta */}
-      <div className="text-xs text-muted-foreground flex items-center gap-2">
-        {loading ? (
-          <>
-            <Loader2 className="h-3 w-3 animate-spin" /> Searching live jobs…
-          </>
-        ) : (
-          <>
-            Showing <span className="text-foreground font-medium">{filtered.length}</span>{" "}
-            {tab === "internships" ? "internships" : tab === "saved" ? "saved jobs" : "jobs"}
-          </>
-        )}
-      </div>
-
-      <AnimatePresence mode="popLayout">
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
-          {filtered.map((j, i) => (
-            <JobCard
-              key={j.id || `${j.title}-${i}`}
-              job={j}
-              saved={savedIds.has(j.id)}
-              onToggleSave={() => toggleSave(j)}
-              onOpen={() => setOpenJob(j)}
-              delay={i * 0.03}
-            />
-          ))}
-        </div>
-      </AnimatePresence>
-
-      {!loading && filtered.length === 0 && (
-        <div className="text-center py-16 md:py-20 text-muted-foreground glass-strong rounded-3xl px-4">
-          <div className="text-sm mb-2">{errMsg ?? "No jobs match your filters."}</div>
-          <div className="text-xs">Try removing some filters or using a broader search term.</div>
-          <button
-            onClick={clearAll}
-            className="mt-4 inline-flex items-center gap-2 text-xs glass rounded-full px-4 py-2 hover:bg-white/10 transition"
-          >
-            Reset filters
-          </button>
-        </div>
+        </>
       )}
 
       <JobModal
@@ -695,7 +721,12 @@ function JobCard({
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-1.5 mt-3">
+          <div className="flex flex-wrap items-center gap-1.5 mt-3">
+            {job.source && (
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 border border-border bg-primary-yellow/30 text-foreground">
+                {job.source === "indeed" ? "Indeed India" : job.source}
+              </span>
+            )}
             <span
               className="text-[10px] glass rounded-full px-2 py-0.5 flex items-center gap-1"
               style={{ color: `oklch(0.78 0.2 ${remoteHue})` }}

@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Outlet, Link, createRootRouteWithContext, useRouter } from "@tanstack/react-router";
 import { Toaster } from "sonner";
+import { ConvexClientProvider } from "@/integrations/convex/provider";
 
 function NotFoundComponent() {
   return (
@@ -70,8 +71,10 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
-      <Toaster theme="dark" position="top-right" richColors />
+      <ConvexClientProvider>
+        <Outlet />
+        <Toaster theme="dark" position="top-right" richColors />
+      </ConvexClientProvider>
     </QueryClientProvider>
   );
 }

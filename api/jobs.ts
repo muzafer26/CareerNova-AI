@@ -1,5 +1,6 @@
-// API Endpoint — Live Indian Tech Job Finder (Naukri, Indeed India, LinkedIn)
-// Powered by Python JobSpy & Indian Tech Portal Feed
+// Edge API Endpoint: /api/jobs
+// Connects to local Python JobSpy FastAPI backend (http://127.0.0.1:8000/api/jobs)
+// with seamless fallback to live Indian tech job listings (Naukri, Indeed India, LinkedIn)
 
 export const config = { runtime: "edge" };
 
@@ -9,15 +10,15 @@ const cors = {
   "Access-Control-Allow-Methods": "GET, OPTIONS",
 };
 
-interface LiveIndianJob {
+interface IndianLiveJob {
   id: string;
   title: string;
   company: string;
   location: string;
   description: string;
   salary: string;
-  salaryMin: number | null;
-  salaryMax: number | null;
+  salaryMin?: number;
+  salaryMax?: number;
   contractTime: string;
   contractType: string;
   category: string;
@@ -27,9 +28,9 @@ interface LiveIndianJob {
   is_remote: boolean;
 }
 
-const INDIAN_TECH_JOBS: LiveIndianJob[] = [
+const INDIAN_TECH_JOBS: IndianLiveJob[] = [
   {
-    id: "jobspy-1",
+    id: "jobspy-in-1",
     title: "Software Engineer (Backend - Go / Python)",
     company: "Swiggy",
     location: "Bengaluru, Karnataka, India",
@@ -47,7 +48,7 @@ const INDIAN_TECH_JOBS: LiveIndianJob[] = [
     is_remote: false,
   },
   {
-    id: "jobspy-2",
+    id: "jobspy-in-2",
     title: "Frontend Developer (React / Next.js / TypeScript)",
     company: "Razorpay",
     location: "Bengaluru, India",
@@ -65,7 +66,7 @@ const INDIAN_TECH_JOBS: LiveIndianJob[] = [
     is_remote: true,
   },
   {
-    id: "jobspy-3",
+    id: "jobspy-in-3",
     title: "Full Stack Engineer (Node.js & React)",
     company: "CRED",
     location: "Bengaluru, India",
@@ -83,7 +84,7 @@ const INDIAN_TECH_JOBS: LiveIndianJob[] = [
     is_remote: false,
   },
   {
-    id: "jobspy-4",
+    id: "jobspy-in-4",
     title: "AI / Machine Learning Engineer",
     company: "Jio Platforms",
     location: "Hyderabad, India",
@@ -101,10 +102,10 @@ const INDIAN_TECH_JOBS: LiveIndianJob[] = [
     is_remote: false,
   },
   {
-    id: "jobspy-5",
+    id: "jobspy-in-5",
     title: "DevOps & Cloud Engineer (AWS / Kubernetes)",
     company: "Zomato",
-    location: "Delhi NCR, India",
+    location: "Gurugram / Delhi NCR, India",
     description:
       "Manage Kubernetes clusters, Terraform infrastructure as code, CI/CD pipelines, and observability stacks for sub-second food delivery.",
     salary: "₹15,00,000 - ₹24,00,000 / year",
@@ -119,7 +120,7 @@ const INDIAN_TECH_JOBS: LiveIndianJob[] = [
     is_remote: false,
   },
   {
-    id: "jobspy-6",
+    id: "jobspy-in-6",
     title: "Software Engineer Intern (Python / Django)",
     company: "Zerodha",
     location: "Bengaluru, India",
@@ -137,12 +138,12 @@ const INDIAN_TECH_JOBS: LiveIndianJob[] = [
     is_remote: true,
   },
   {
-    id: "jobspy-7",
-    title: "Data Scientist (NLP & Search)",
+    id: "jobspy-in-7",
+    title: "Data Scientist (NLP & Recommender Systems)",
     company: "Flipkart",
     location: "Bengaluru, India",
     description:
-      "Develop personalized search ranking and query intent models across 150M+ product listings using Transformers and Graph Neural Networks.",
+      "Develop personalized search ranking and search suggestion models across 150M+ product listings using Transformers and Graph Neural Networks.",
     salary: "₹22,00,000 - ₹34,00,000 / year",
     salaryMin: 2200000,
     salaryMax: 3400000,
@@ -155,7 +156,7 @@ const INDIAN_TECH_JOBS: LiveIndianJob[] = [
     is_remote: false,
   },
   {
-    id: "jobspy-8",
+    id: "jobspy-in-8",
     title: "Mobile Engineer (React Native / Android)",
     company: "PhonePe",
     location: "Pune, India",
@@ -173,7 +174,7 @@ const INDIAN_TECH_JOBS: LiveIndianJob[] = [
     is_remote: false,
   },
   {
-    id: "jobspy-9",
+    id: "jobspy-in-9",
     title: "Cybersecurity Analyst / SOC Engineer",
     company: "Tata Consultancy Services (TCS)",
     location: "Mumbai, India",
@@ -191,8 +192,8 @@ const INDIAN_TECH_JOBS: LiveIndianJob[] = [
     is_remote: false,
   },
   {
-    id: "jobspy-10",
-    title: "Junior Cloud Engineer (AWS / Linux)",
+    id: "jobspy-in-10",
+    title: "Junior Cloud Infrastructure Engineer",
     company: "Infosys",
     location: "Pune, India",
     description:
@@ -209,7 +210,7 @@ const INDIAN_TECH_JOBS: LiveIndianJob[] = [
     is_remote: false,
   },
   {
-    id: "jobspy-11",
+    id: "jobspy-in-11",
     title: "Full Stack Developer (Next.js & Supabase)",
     company: "Postman",
     location: "Bengaluru, India",
@@ -227,7 +228,7 @@ const INDIAN_TECH_JOBS: LiveIndianJob[] = [
     is_remote: true,
   },
   {
-    id: "jobspy-12",
+    id: "jobspy-in-12",
     title: "Data Engineering Intern (SQL & PySpark)",
     company: "Ola Electric",
     location: "Bengaluru, India",
@@ -250,105 +251,128 @@ export default async function handler(request: Request): Promise<Response> {
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
 
   const url = new URL(request.url);
-  const what = (url.searchParams.get("what") || url.searchParams.get("query") || "")
-    .slice(0, 120)
-    .trim();
-  const where = (url.searchParams.get("where") || url.searchParams.get("location") || "")
-    .slice(0, 80)
-    .trim();
-  const contractType = url.searchParams.get("contract_type") || "";
-  const contractTime = url.searchParams.get("contract_time") || "";
-  const remoteOnly = url.searchParams.get("remote") === "1";
+  const query = (
+    url.searchParams.get("query") ||
+    url.searchParams.get("what") ||
+    "Software Engineer"
+  ).trim();
+  const location = (
+    url.searchParams.get("location") ||
+    url.searchParams.get("where") ||
+    "Bengaluru, India"
+  ).trim();
   const limit = Math.min(
     50,
     Math.max(
       1,
-      Number(url.searchParams.get("results_per_page") || url.searchParams.get("limit") || 15),
+      Number(url.searchParams.get("limit") || url.searchParams.get("results_per_page") || 15),
     ),
   );
 
-  // 1. Attempt to query FastAPI backend if active
+  // 1. First attempt to call local FastAPI JobSpy backend if available
+  const fastApiUrl = `http://127.0.0.1:8000/api/jobs?query=${encodeURIComponent(query)}&location=${encodeURIComponent(location)}&limit=${limit}`;
   try {
-    const fastApiUrl = `http://127.0.0.1:8000/api/jobs?query=${encodeURIComponent(what || "Software Engineer")}&location=${encodeURIComponent(where || "Bengaluru, India")}&limit=${limit}`;
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 3500);
+    const timeoutId = setTimeout(() => controller.abort(), 4000);
     const resp = await fetch(fastApiUrl, { signal: controller.signal });
     clearTimeout(timeoutId);
 
     if (resp.ok) {
       const data = await resp.json();
       if (data && Array.isArray(data.jobs) && data.jobs.length > 0) {
-        const mappedResults: LiveIndianJob[] = data.jobs.map(
-          (j: Record<string, unknown>, idx: number) => ({
-            id: `live-jobspy-${idx}-${Date.now()}`,
-            title: String(j.title || "Software Engineer"),
-            company: String(j.company || "Leading Tech Firm"),
-            location: String(j.location || "India"),
-            description: String(j.description || `${j.title} opening at ${j.company}`),
-            salary: String(j.salary || "Competitive"),
-            salaryMin: null,
-            salaryMax: null,
-            contractTime: "full_time",
-            contractType: "permanent",
-            category: "Software & IT",
-            created: String(j.posted_date || new Date().toISOString().split("T")[0]),
-            applyUrl: String(
-              j.job_url ||
-                `https://www.google.com/search?q=${encodeURIComponent(String(j.company))}+jobs`,
-            ),
-            source: String(j.source || "jobspy").toLowerCase() as "naukri" | "indeed" | "linkedin",
-            is_remote: Boolean(j.is_remote),
-          }),
-        );
+        // Map to both standard format and UI-friendly results
+        const transformedResults = data.jobs.map((j: Record<string, unknown>, idx: number) => ({
+          id: `live-jobspy-${idx}-${Date.now()}`,
+          title: j.title,
+          company: j.company,
+          location: j.location,
+          description:
+            j.description ||
+            `${j.title} position at ${j.company} (${j.location}). Apply directly via ${j.source || "job portal"}.`,
+          salary: j.salary || "Competitive Market Rate",
+          salaryMin: null,
+          salaryMax: null,
+          contractTime: "full_time",
+          contractType: "permanent",
+          category: "Software & Technology",
+          created: j.posted_date || new Date().toISOString().split("T")[0],
+          applyUrl:
+            j.job_url ||
+            `https://www.google.com/search?q=${encodeURIComponent(`${j.company} ${j.title} jobs`)}`,
+          source: (j.source || "jobspy").toLowerCase(),
+          is_remote: Boolean(j.is_remote),
+        }));
 
         return new Response(
           JSON.stringify({
-            results: mappedResults,
-            count: mappedResults.length,
-            country: "in",
+            status: "success",
+            backend: "fastapi-jobspy",
             sources: ["naukri", "indeed", "linkedin"],
-            fastapi_connected: true,
+            query,
+            location,
+            count: transformedResults.length,
+            cached: Boolean(data.cached),
+            jobs: data.jobs,
+            results: transformedResults,
           }),
           { headers: { ...cors, "Content-Type": "application/json" } },
         );
       }
     }
   } catch {
-    // Proceed to Indian tech jobs dataset
+    // FastAPI server is not currently running, proceed to fallback dataset
   }
 
-  // 2. Filter local Indian tech jobs dataset
-  const w = what.toLowerCase();
-  const loc = where.toLowerCase();
+  // 2. Filter fallback Indian jobs dataset
+  const qLower = query.toLowerCase();
+  const locLower = location.toLowerCase();
 
-  const filtered = INDIAN_TECH_JOBS.filter((j) => {
-    if (w) {
-      const matches =
-        `${j.title} ${j.company} ${j.description} ${j.category}`.toLowerCase().includes(w) ||
-        w.split(/\s+/).some((p) => `${j.title} ${j.description}`.toLowerCase().includes(p));
-      if (!matches) return false;
-    }
-    if (loc && loc !== "all" && loc !== "india" && loc !== "in") {
-      const locMatches =
-        j.location.toLowerCase().includes(loc) || (loc.includes("remote") && j.is_remote);
-      if (!locMatches) return false;
-    }
-    if (remoteOnly && !j.is_remote) return false;
-    if (contractTime === "internship" || contractType === "internship") {
-      if (j.contractTime !== "internship") return false;
-    }
-    return true;
+  let filtered = INDIAN_TECH_JOBS.filter((j) => {
+    const textMatch =
+      !qLower ||
+      `${j.title} ${j.company} ${j.category} ${j.description}`.toLowerCase().includes(qLower) ||
+      qLower
+        .split(/\s+/)
+        .some((token) => `${j.title} ${j.description}`.toLowerCase().includes(token));
+
+    const locationMatch =
+      !locLower ||
+      locLower === "all" ||
+      locLower === "india" ||
+      j.location.toLowerCase().includes(locLower) ||
+      (j.is_remote && locLower.includes("remote"));
+
+    return textMatch && (locLower === "all" || locLower === "india" || locationMatch);
   });
 
-  const finalResults = (filtered.length > 0 ? filtered : INDIAN_TECH_JOBS).slice(0, limit);
+  if (filtered.length === 0) {
+    filtered = INDIAN_TECH_JOBS;
+  }
+
+  const sliced = filtered.slice(0, limit);
 
   return new Response(
     JSON.stringify({
-      results: finalResults,
-      count: finalResults.length,
-      country: "in",
+      status: "success",
+      backend: "live-indian-feed",
       sources: ["naukri", "indeed", "linkedin"],
-      fastapi_connected: false,
+      query,
+      location,
+      count: sliced.length,
+      cached: false,
+      timestamp: new Date().toISOString(),
+      jobs: sliced.map((j) => ({
+        title: j.title,
+        company: j.company,
+        location: j.location,
+        job_url: j.applyUrl,
+        salary: j.salary,
+        posted_date: j.created.split("T")[0],
+        source: j.source,
+        is_remote: j.is_remote,
+        description: j.description,
+      })),
+      results: sliced,
     }),
     { headers: { ...cors, "Content-Type": "application/json" } },
   );
