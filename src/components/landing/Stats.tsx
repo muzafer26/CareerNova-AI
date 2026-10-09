@@ -6,12 +6,12 @@ function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
   const inView = useInView(ref, { once: true, margin: "-50px" });
   const count = useMotionValue(0);
   const rounded = useTransform(count, (v) =>
-    to >= 1000 ? Math.round(v).toLocaleString() : Math.round(v).toString()
+    to >= 1000 ? Math.round(v).toLocaleString() : Math.round(v).toString(),
   );
 
   useEffect(() => {
     if (inView) {
-      const c = animate(count, to, { duration: 2.2, ease: [0.22, 1, 0.36, 1] });
+      const c = animate(count, to, { duration: 1.8, ease: "easeOut" });
       return c.stop;
     }
   }, [inView, to, count]);
@@ -19,52 +19,106 @@ function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
   return (
     <span ref={ref} className="inline-flex items-baseline">
       <motion.span>{rounded}</motion.span>
-      <span className="warm-text">{suffix}</span>
+      <span>{suffix}</span>
     </span>
   );
 }
 
 const stats = [
-  { value: 10000, suffix: "+", label: "Students guided", note: "Across 38 countries" },
-  { value: 500, suffix: "+", label: "Career paths", note: "Mapped by Nova" },
-  { value: 95, suffix: "%", label: "Found clarity", note: "Within four sessions" },
-  { value: 24, suffix: "/7", label: "Always present", note: "A mentor that never sleeps" },
+  {
+    value: 10000,
+    suffix: "+",
+    label: "STUDENTS GUIDED",
+    shape: "circle",
+    note: "Across 40+ countries globally",
+  },
+  {
+    value: 500,
+    suffix: "+",
+    label: "CAREER ROADMAPS",
+    shape: "square",
+    note: "Engineered from beginner to senior",
+  },
+  {
+    value: 95,
+    suffix: "%",
+    label: "SUCCESS RATE",
+    shape: "triangle",
+    note: "Reported career clarity in 30 days",
+  },
+  {
+    value: 24,
+    suffix: "/7",
+    label: "ACTIVE MENTOR",
+    shape: "rot-square",
+    note: "Zero downtime AI guidance",
+  },
 ];
 
 export function Stats() {
   return (
-    <section className="relative py-32 md:py-40 px-6 md:px-10">
-      <div className="mx-auto max-w-[1280px]">
-        <div className="grid grid-cols-12 gap-y-14 md:gap-x-10 items-end">
-          <div className="col-span-12 md:col-span-5">
-            <div className="eyebrow mb-6">— By the numbers</div>
-            <h2 className="font-serif text-5xl md:text-6xl leading-[0.95] tracking-[-0.02em] text-balance">
-              Quiet on the surface. <span className="italic text-muted-foreground">Loud where it counts.</span>
+    <section className="relative bg-[#F0C020] border-b-4 border-[#121212] py-20 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b-4 border-[#121212]">
+          <div>
+            <div className="inline-block bg-[#121212] text-white px-3 py-1 text-xs font-black uppercase tracking-widest mb-3">
+              QUANTITATIVE PROOF
+            </div>
+            <h2 className="font-display font-black text-4xl sm:text-6xl uppercase tracking-tighter text-[#121212] leading-[0.95]">
+              METRICS OF <br />
+              <span className="bg-white px-3 py-0.5 border-4 border-[#121212] inline-block mt-1 shadow-[4px_4px_0px_0px_#121212]">
+                ARCHITECTURAL IMPACT.
+              </span>
             </h2>
           </div>
-          <div className="col-span-12 md:col-span-6 md:col-start-7 max-w-md text-muted-foreground text-[15px] leading-relaxed">
-            We don't measure ourselves in features shipped. We measure in the
-            quiet wins — a roadmap chosen, an offer accepted, a Sunday spent
-            without anxiety about Monday.
-          </div>
+          <p className="max-w-md text-sm sm:text-base font-bold text-[#121212] leading-relaxed">
+            Every feature is mathematically calibrated to reduce uncertainty and accelerate career
+            mastery.
+          </p>
         </div>
 
-        <div className="mt-20 hairline pt-12 grid grid-cols-2 md:grid-cols-4">
-          {stats.map((s, i) => (
-            <motion.div
+        {/* 4-Column Bauhaus Geometric Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-12">
+          {stats.map((s, idx) => (
+            <div
               key={s.label}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.7, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-              className={`px-2 md:px-6 py-6 ${i > 0 ? "md:border-l md:border-white/[0.06]" : ""} ${i === 2 ? "border-t md:border-t-0 border-white/[0.06]" : ""} ${i === 3 ? "border-t md:border-t-0 border-white/[0.06]" : ""}`}
+              className="bg-white border-4 border-[#121212] p-6 shadow-[8px_8px_0px_0px_#121212] flex flex-col justify-between hover:-translate-y-1 transition-transform"
             >
-              <div className="font-serif text-5xl md:text-7xl leading-none tracking-[-0.02em]">
-                <Counter to={s.value} suffix={s.suffix} />
+              {/* Geometric Header Shape */}
+              <div className="flex items-center justify-between pb-4 border-b-2 border-[#121212]">
+                <span className="font-mono text-xs font-black uppercase tracking-wider text-[#121212]">
+                  0{idx + 1} // METRIC
+                </span>
+                {s.shape === "circle" && (
+                  <span className="w-5 h-5 rounded-full bg-[#D02020] border-2 border-black" />
+                )}
+                {s.shape === "square" && (
+                  <span className="w-5 h-5 rounded-none bg-[#1040C0] border-2 border-black" />
+                )}
+                {s.shape === "triangle" && (
+                  <span className="w-5 h-5 clip-triangle bg-[#F0C020] border-2 border-black" />
+                )}
+                {s.shape === "rot-square" && (
+                  <span className="w-4 h-4 rounded-none bg-[#121212] rotate-45 border border-black" />
+                )}
               </div>
-              <div className="mt-4 text-sm font-medium">{s.label}</div>
-              <div className="mt-1 text-[13px] text-muted-foreground">{s.note}</div>
-            </motion.div>
+
+              {/* Bold Primary Metric */}
+              <div className="my-6">
+                <div className="font-display font-black text-5xl sm:text-6xl text-[#121212] tracking-tighter">
+                  <Counter to={s.value} suffix={s.suffix} />
+                </div>
+                <div className="font-black text-sm uppercase tracking-wider text-[#D02020] mt-2">
+                  {s.label}
+                </div>
+              </div>
+
+              {/* Footer Note */}
+              <div className="pt-4 border-t-2 border-[#121212] text-xs font-medium text-[#4A4A4A]">
+                {s.note}
+              </div>
+            </div>
           ))}
         </div>
       </div>

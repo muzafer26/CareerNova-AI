@@ -1,94 +1,93 @@
-import { motion } from "framer-motion";
-import { Sparkles, User } from "lucide-react";
+import { Sparkles, Bot, Send } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 
 const messages = [
-  { role: "user", content: "How do I become a frontend developer?" },
+  { role: "user", content: "How do I transition from fresher to Frontend Engineer in 6 months?" },
   {
     role: "ai",
-    content: `Great choice! Here's your fast-track plan:\n\n**Core skills**\n• HTML, CSS, JavaScript fundamentals\n• React + TypeScript\n• Tailwind CSS, Git, REST APIs\n\n**Roadmap (4–6 months)**\n1. Master JavaScript ES6+\n2. Build 3 React projects (todo, dashboard, clone)\n3. Learn TypeScript + state management\n4. Ship a portfolio site\n\n**Salary range**: ₹6L–18L / yr (India), $70K–130K (US)`,
+    content: `Engineered roadmap:\n\n1. Foundations (Weeks 1–4): Semantic HTML5, CSS Grid, Modern Tailwind\n2. Core Runtime (Weeks 5–10): Deep JavaScript ES6+, Event Loop, Async/Await\n3. Framework (Weeks 11–18): React 19, TypeScript generics, TanStack Router/Query\n4. Verified Deliverable: Deploy 2 production apps meeting Lighthouse 95+ scores\n\nCompensation: Entry ₹4–7 LPA | Global $60K–$75K`,
   },
 ];
 
 export function ChatbotDemo() {
   return (
-    <section className="relative py-32 px-6">
-      <div className="max-w-5xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
-        <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <div className="inline-block glass rounded-full px-3 py-1 text-xs text-muted-foreground mb-4">AI Mentor</div>
-          <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight">
-            Your <span className="gradient-text">always-on</span> career mentor
+    <section className="relative py-24 px-4 sm:px-6 lg:px-8 border-b-4 border-[#121212] bg-[#F0F0F0]">
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-12 items-center">
+        {/* Left Side */}
+        <div className="lg:col-span-5">
+          <div className="inline-flex items-center gap-2 bg-[#1040C0] text-white border-2 border-[#121212] px-3.5 py-1 text-xs font-mono font-black uppercase tracking-widest shadow-[2px_2px_0px_0px_#121212] mb-4">
+            INTELLIGENCE · 24/7 MENTOR
+          </div>
+          <h2 className="font-display font-black text-4xl sm:text-6xl uppercase tracking-tighter text-[#121212] leading-[0.95]">
+            ZERO FLUFF. <br />
+            <span className="text-[#D02020]">ARCHITECTURAL</span> ADVICE.
           </h2>
-          <p className="text-muted-foreground mt-5 leading-relaxed">
-            Ask anything — from "how do I switch from non-tech to tech" to "what's the best startup to join". Get tailored, specific, no-fluff guidance instantly.
+          <p className="font-medium text-sm sm:text-base text-[#121212] mt-6 leading-relaxed border-l-4 border-[#1040C0] pl-4">
+            Ask complex engineering questions. Receive structured plans, vetted free tutorial paths,
+            and compensation benchmarks in seconds.
           </p>
-          <ul className="mt-6 space-y-2 text-sm text-muted-foreground">
-            <li>• Personalized to your background</li>
-            <li>• Roadmaps with project ideas</li>
-            <li>• Real salary benchmarks</li>
-          </ul>
-        </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="glass-strong rounded-3xl p-5 elevated-shadow"
-        >
-          <div className="flex items-center gap-2 pb-3 border-b border-white/10">
-            <div className="h-2 w-2 rounded-full bg-red-400" />
-            <div className="h-2 w-2 rounded-full bg-yellow-400" />
-            <div className="h-2 w-2 rounded-full bg-green-400" />
-            <span className="ml-2 text-xs text-muted-foreground">CareerNova Mentor</span>
-          </div>
-
-          <div className="space-y-4 pt-4">
-            {messages.map((m, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.6 + 0.2 }}
-                className={`flex gap-3 ${m.role === "user" ? "justify-end" : ""}`}
-              >
-                {m.role === "ai" && (
-                  <div className="h-8 w-8 rounded-xl aurora-bg flex items-center justify-center flex-shrink-0">
-                    <Sparkles className="h-4 w-4 text-background" />
-                  </div>
-                )}
-                <div
-                  className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm whitespace-pre-line ${
-                    m.role === "user" ? "aurora-bg text-background" : "glass"
-                  }`}
-                >
-                  {m.content}
-                </div>
-                {m.role === "user" && (
-                  <div className="h-8 w-8 rounded-xl glass flex items-center justify-center flex-shrink-0">
-                    <User className="h-4 w-4" />
-                  </div>
-                )}
-              </motion.div>
-            ))}
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 1.6 }}
-              className="flex gap-1.5 px-3 pt-1"
+          <div className="mt-8">
+            <Link
+              to="/dashboard/mentor"
+              className="bg-[#D02020] text-white border-4 border-[#121212] font-mono text-xs font-black uppercase px-6 py-4 shadow-bauhaus hover:bg-[#D02020]/90 btn-press inline-flex items-center gap-2"
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/60 animate-bounce" />
-              <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/60 animate-bounce" style={{ animationDelay: "0.15s" }} />
-              <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/60 animate-bounce" style={{ animationDelay: "0.3s" }} />
-            </motion.div>
+              <span>LAUNCH AI MENTOR WORKSPACE</span>
+              <span>→</span>
+            </Link>
           </div>
-        </motion.div>
+        </div>
+
+        {/* Right Side: Simulated Bauhaus Terminal */}
+        <div className="lg:col-span-7 bg-white border-4 border-[#121212] shadow-bauhaus-lg">
+          {/* Header */}
+          <div className="bg-[#121212] text-white px-4 py-3 flex items-center justify-between border-b-4 border-[#121212]">
+            <div className="flex items-center gap-2">
+              <span className="w-3 h-3 rounded-full bg-[#D02020] border border-white" />
+              <span className="w-3 h-3 bg-[#1040C0] border border-white" />
+              <span className="w-3 h-3 clip-triangle bg-[#F0C020] border border-white" />
+              <span className="font-mono text-xs font-black uppercase tracking-widest text-[#F0C020] ml-2">
+                TERMINAL // CAREERNOVA AI ENGINE
+              </span>
+            </div>
+            <span className="font-mono text-[10px] text-white/70">STATUS: READY</span>
+          </div>
+
+          {/* Messages */}
+          <div className="p-6 space-y-4 font-mono text-xs">
+            {messages.map((m, i) => (
+              <div
+                key={i}
+                className={`p-4 border-2 border-[#121212] ${
+                  m.role === "user"
+                    ? "bg-[#F0C020] text-[#121212] font-black shadow-[3px_3px_0px_0px_#121212] max-w-lg ml-auto"
+                    : "bg-[#F0F0F0] text-[#121212] font-bold shadow-[3px_3px_0px_0px_#121212]"
+                }`}
+              >
+                <div className="text-[10px] font-black uppercase tracking-widest text-[#4A4A4A] mb-1">
+                  {m.role === "user" ? "USER PROMPT" : "MENTOR DIAGNOSTIC RESPONSE"}
+                </div>
+                <div className="whitespace-pre-line leading-relaxed">{m.content}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Input simulation */}
+          <div className="p-4 border-t-4 border-[#121212] bg-[#F0F0F0] flex gap-2">
+            <input
+              type="text"
+              readOnly
+              value="What skills are required for an AI Engineer in 2026?"
+              className="flex-1 bg-white border-2 border-[#121212] font-mono text-xs px-3 py-2 text-[#4A4A4A] focus:outline-none"
+            />
+            <Link
+              to="/dashboard/mentor"
+              className="bg-[#121212] text-white border-2 border-[#121212] px-4 py-2 font-mono text-xs font-black uppercase hover:bg-[#D02020] btn-press"
+            >
+              SEND →
+            </Link>
+          </div>
+        </div>
       </div>
     </section>
   );

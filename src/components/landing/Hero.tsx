@@ -1,243 +1,214 @@
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
-import { ArrowUpRight, Sparkles } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ArrowRight, Sparkles, Send } from "lucide-react";
+import { useState } from "react";
 import { FloatingParticles } from "@/components/Aurora";
-
-const ease = [0.22, 1, 0.36, 1] as const;
 
 export function Hero() {
   return (
-    <section className="relative min-h-[100svh] overflow-hidden">
-      <FloatingParticles count={18} />
+    <section className="relative overflow-hidden border-b-4 border-[#121212]">
+      <FloatingParticles count={10} />
 
-      {/* Top hairline meta — editorial chrome */}
-      <div className="relative z-10 mx-auto max-w-[1280px] px-6 md:px-10 pt-32 md:pt-36">
-        <div className="grid grid-cols-12 gap-y-12 md:gap-x-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
+          {/* LEFT: Constructivist Typographic Statement */}
+          <div className="lg:col-span-7 flex flex-col justify-center">
+            {/* Bauhaus Eyebrow Tag */}
+            <div className="inline-flex items-center gap-2 bg-[#F0C020] text-[#121212] border-2 border-[#121212] px-3.5 py-1 text-xs font-black uppercase tracking-widest shadow-[3px_3px_0px_0px_#121212] w-fit mb-6">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#D02020] border border-[#121212]" />
+              BAUHAUS EDITION · ISSUE 01
+            </div>
 
-          {/* LEFT — editorial hero */}
-          <div className="col-span-12 lg:col-span-8">
-            <motion.div
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease }}
-              className="eyebrow mb-10"
-            >
-              Issue 001 — A career platform, reimagined
-            </motion.div>
-
-            <h1 className="font-serif font-normal text-[clamp(3.25rem,9vw,8.25rem)] leading-[0.92] tracking-[-0.03em] text-balance">
-              <motion.span
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9, ease }}
-                className="block"
-              >
-                Find the work
-              </motion.span>
-              <motion.span
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9, delay: 0.08, ease }}
-                className="block"
-              >
-                you were
-                <span className="italic warm-text"> meant </span>
-                to do.
-              </motion.span>
+            {/* Massive Display Typography */}
+            <h1 className="font-display font-black text-5xl sm:text-7xl lg:text-8xl leading-[0.9] tracking-tighter uppercase text-[#121212]">
+              FORM <span className="text-[#D02020]">FOLLOWS</span> <br />
+              <span className="inline-block bg-[#1040C0] text-white px-3 py-1 mt-2 border-4 border-[#121212] shadow-[6px_6px_0px_0px_#121212]">
+                FUNCTION.
+              </span>
+              <br />
+              YOUR CAREER <br />
+              <span className="text-[#D02020]">REENGINEERED.</span>
             </h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.25, ease }}
-              className="mt-10 max-w-[44ch] text-lg md:text-xl leading-relaxed text-muted-foreground text-pretty"
-            >
-              CareerNova is a quiet, AI-native operating system for your career —
-              guidance from a personal mentor, roadmaps tailored to who you are,
-              and real opportunities the moment you're ready for them.
-            </motion.p>
+            {/* Architectural Subtitle */}
+            <p className="mt-8 text-base sm:text-lg font-medium text-[#121212] max-w-xl leading-relaxed border-l-4 border-[#D02020] pl-4">
+              CareerNova deconstructs career planning into pure architectural clarity. Get tailored
+              roadmaps, real-time mentor feedback, and live opportunity feeds without corporate
+              fluff.
+            </p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.4, ease }}
-              className="mt-12 flex flex-wrap items-center gap-3"
-            >
+            {/* Primary & Secondary Bauhaus Action Buttons */}
+            <div className="mt-10 flex flex-wrap items-center gap-4">
               <Link
                 to="/signup"
-                className="group inline-flex items-center gap-2 bg-foreground text-background font-medium pl-5 pr-4 py-3 rounded-full text-sm hover:bg-foreground/90 transition"
+                className="bg-[#D02020] text-white border-4 border-[#121212] shadow-[6px_6px_0px_0px_#121212] px-8 py-4 text-sm font-black uppercase tracking-wider btn-press hover:bg-[#D02020]/90 transition inline-flex items-center gap-3"
               >
-                Begin your map
-                <span className="grid place-items-center h-6 w-6 rounded-full bg-background/15">
-                  <ArrowUpRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </span>
+                START YOUR ROADMAP
+                <ArrowRight className="h-5 w-5" />
               </Link>
+
               <a
                 href="#features"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-full text-sm text-muted-foreground hover:text-foreground transition"
+                className="bg-white text-[#121212] border-4 border-[#121212] shadow-[6px_6px_0px_0px_#121212] px-7 py-4 text-sm font-black uppercase tracking-wider btn-press hover:bg-[#F0F0F0] transition inline-flex items-center gap-2"
               >
-                See what's inside
-                <span className="text-muted-foreground/60">→</span>
+                EXPLORE MODULES
               </a>
-            </motion.div>
+            </div>
+
+            {/* Bauhaus Tri-Metric Bar */}
+            <div className="mt-14 pt-8 border-t-4 border-[#121212] grid grid-cols-3 gap-4">
+              <div>
+                <div className="font-display font-black text-3xl sm:text-4xl text-[#121212]">
+                  500+
+                </div>
+                <div className="text-xs font-bold uppercase tracking-wider text-[#4A4A4A] mt-1">
+                  CURATED PATHS
+                </div>
+              </div>
+              <div className="border-l-2 border-[#121212] pl-4">
+                <div className="font-display font-black text-3xl sm:text-4xl text-[#1040C0]">
+                  100%
+                </div>
+                <div className="text-xs font-bold uppercase tracking-wider text-[#4A4A4A] mt-1">
+                  FREE ACCESS
+                </div>
+              </div>
+              <div className="border-l-2 border-[#121212] pl-4">
+                <div className="font-display font-black text-3xl sm:text-4xl text-[#D02020]">
+                  24/7
+                </div>
+                <div className="text-xs font-bold uppercase tracking-wider text-[#4A4A4A] mt-1">
+                  AI MENTOR
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* RIGHT — floating mentor card, asymmetric */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.45, ease }}
-            className="col-span-12 lg:col-span-4 lg:pt-20"
-          >
-            <MentorCard />
-          </motion.div>
+          {/* RIGHT: Color Blocked Constructivist Panel in Bauhaus Blue */}
+          <div className="lg:col-span-5 relative bg-[#1040C0] border-4 border-[#121212] shadow-[10px_10px_0px_0px_#121212] p-6 md:p-8 flex flex-col justify-between overflow-hidden">
+            {/* Background geometric overlay decorations */}
+            <div className="absolute top-4 right-4 w-28 h-28 rounded-full bg-[#D02020] border-4 border-[#121212] shadow-[4px_4px_0px_0px_#121212] opacity-90 pointer-events-none" />
+            <div className="absolute -bottom-8 -left-8 w-36 h-36 rounded-none bg-[#F0C020] border-4 border-[#121212] rotate-45 opacity-85 pointer-events-none" />
+
+            {/* Panel Header */}
+            <div className="relative z-10 flex items-center justify-between pb-4 border-b-4 border-[#121212] bg-white px-4 py-2.5 shadow-[4px_4px_0px_0px_#121212]">
+              <div className="flex items-center gap-2">
+                <span className="w-3.5 h-3.5 rounded-full bg-[#D02020] border-2 border-black" />
+                <span className="w-3.5 h-3.5 rounded-none bg-[#F0C020] border-2 border-black" />
+                <span className="w-3.5 h-3.5 clip-triangle bg-[#1040C0] border-2 border-black" />
+                <span className="font-black text-xs uppercase tracking-widest ml-1 text-[#121212]">
+                  TERMINAL // NOVA 01
+                </span>
+              </div>
+              <span className="text-[10px] font-black uppercase px-2 py-0.5 bg-[#F0C020] border border-black">
+                ACTIVE
+              </span>
+            </div>
+
+            {/* Interactive Mentor Preview Card inside Blue Field */}
+            <div className="relative z-10 my-8">
+              <InteractiveMentorPreview />
+            </div>
+
+            {/* Panel Bottom Graphic Banner */}
+            <div className="relative z-10 bg-[#F0C020] text-[#121212] border-4 border-[#121212] p-4 shadow-[4px_4px_0px_0px_#121212]">
+              <div className="flex items-center justify-between text-xs font-black uppercase tracking-wider">
+                <span>SYSTEM ARCHITECTURE</span>
+                <span className="bg-[#121212] text-white px-2 py-0.5">V1.0</span>
+              </div>
+              <p className="mt-2 text-xs font-bold text-[#121212] leading-snug">
+                "Simplicity is not the lack of clutter, but the mastery of essential structure."
+              </p>
+            </div>
+          </div>
         </div>
-
-        {/* Bottom meta strip */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.7 }}
-          className="mt-24 md:mt-32 hairline pt-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-[12px] font-mono uppercase tracking-[0.18em] text-muted-foreground"
-        >
-          <div>
-            <div className="text-foreground/60">— Mentor</div>
-            <div className="mt-1.5 text-foreground/90 normal-case font-sans tracking-normal text-sm">Always-on, never tired</div>
-          </div>
-          <div>
-            <div className="text-foreground/60">— Roadmap</div>
-            <div className="mt-1.5 text-foreground/90 normal-case font-sans tracking-normal text-sm">Drawn for one, not many</div>
-          </div>
-          <div>
-            <div className="text-foreground/60">— Jobs</div>
-            <div className="mt-1.5 text-foreground/90 normal-case font-sans tracking-normal text-sm">Real listings, live feed</div>
-          </div>
-          <div>
-            <div className="text-foreground/60">— Resume</div>
-            <div className="mt-1.5 text-foreground/90 normal-case font-sans tracking-normal text-sm">ATS-grade analysis</div>
-          </div>
-        </motion.div>
       </div>
     </section>
   );
 }
 
-function MentorCard() {
+function InteractiveMentorPreview() {
+  const [inputVal, setInputVal] = useState("");
+  const [messages, setMessages] = useState([
+    {
+      sender: "nova",
+      text: "Welcome to CareerNova. Which industry or discipline are you aiming to master?",
+      color: "#FFFFFF",
+    },
+    {
+      sender: "user",
+      text: "I want to transition from student to modern Frontend / Full Stack developer.",
+      color: "#FFF9C4",
+    },
+    {
+      sender: "nova",
+      text: "Architecture blueprint ready: 1. TypeScript & React 19 fundamentals. 2. Build 3 production proof-of-work systems. 3. Deploy full-stack apps with automated CI/CD.",
+      color: "#FFFFFF",
+    },
+  ]);
+
+  const handleSend = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inputVal.trim()) return;
+    const newMsg = { sender: "user", text: inputVal.trim(), color: "#FFF9C4" };
+    setMessages((prev) => [
+      ...prev,
+      newMsg,
+      {
+        sender: "nova",
+        text: `Target mapped for: "${inputVal.trim()}". Check your personalized 90-day milestone checklist in the dashboard!`,
+        color: "#FFFFFF",
+      },
+    ]);
+    setInputVal("");
+  };
+
   return (
-    <motion.div
-      whileHover={{ y: -6 }}
-      transition={{ type: "spring", stiffness: 220, damping: 22 }}
-      className="relative rounded-3xl glass-strong p-5 elevated-shadow overflow-hidden lift animate-float"
-    >
-      <div
-        className="pointer-events-none absolute -inset-px rounded-3xl opacity-60"
-        style={{
-          background:
-            "linear-gradient(180deg, oklch(1 0 0 / 0.10), transparent 30%)",
-        }}
-      />
-      <div className="pointer-events-none absolute -inset-10 -z-10 blur-3xl opacity-40"
-        style={{ background: "radial-gradient(circle at 30% 20%, oklch(0.84 0.13 78 / 0.25), transparent 60%)" }}
-      />
-
-      <div className="relative flex items-center gap-2.5 pb-4 hairline-b">
-        <span className="grid place-items-center h-6 w-6 rounded-full aurora-bg shadow-[0_0_16px_var(--glow)]">
-          <Sparkles className="h-3 w-3 text-background" />
-        </span>
-        <div className="text-[13px] font-medium">Nova</div>
-        <div className="ml-auto flex items-center gap-1.5 text-[11px] text-muted-foreground font-mono">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_oklch(0.78_0.16_158)] animate-pulse" />
-          online
-        </div>
+    <div className="bg-white border-4 border-[#121212] shadow-[6px_6px_0px_0px_#121212] p-4 space-y-3">
+      <div className="space-y-2.5 max-h-64 overflow-y-auto pr-1">
+        {messages.map((m, idx) => (
+          <div
+            key={idx}
+            className={`p-3 border-2 border-[#121212] shadow-[3px_3px_0px_0px_#121212] text-xs font-medium leading-relaxed ${
+              m.sender === "user"
+                ? "bg-[#FFF9C4] ml-4 text-[#121212]"
+                : "bg-white mr-4 text-[#121212]"
+            }`}
+          >
+            <div className="flex items-center gap-1.5 font-black uppercase text-[10px] mb-1 tracking-wider">
+              {m.sender === "nova" ? (
+                <>
+                  <span className="w-2 h-2 rounded-full bg-[#D02020]" />
+                  NOVA MENTOR
+                </>
+              ) : (
+                <>
+                  <span className="w-2 h-2 rounded-none bg-[#1040C0]" />
+                  EXPLORER
+                </>
+              )}
+            </div>
+            {m.text}
+          </div>
+        ))}
       </div>
 
-      <div className="relative space-y-3 pt-4 min-h-[200px]">
-        <Bubble side="ai" delay={0.2}>
-          What kind of work do you lose track of time doing?
-        </Bubble>
-        <Bubble side="user" delay={1.4}>
-          Building things people actually use.
-        </Bubble>
-        <TypingBubble delay={2.6}>
-          Then let's draft a route through product engineering — three months, weekly checkpoints. Ready?
-        </TypingBubble>
-      </div>
-
-      <div className="relative mt-5 flex items-center gap-2 pt-4 hairline">
-        <div className="flex-1 h-9 rounded-full bg-white/[0.04] border border-white/[0.06] flex items-center px-4 text-[13px] text-muted-foreground">
-          <span className="opacity-60">Ask Nova anything…</span>
-        </div>
-        <button className="h-9 w-9 rounded-full bg-foreground text-background grid place-items-center hover:bg-foreground/90 transition shadow-[0_4px_16px_-4px_oklch(1_0_0_/_0.3)]">
-          <ArrowUpRight className="h-4 w-4" />
+      <form onSubmit={handleSend} className="pt-2 flex gap-2">
+        <input
+          type="text"
+          value={inputVal}
+          onChange={(e) => setInputVal(e.target.value)}
+          placeholder="Ask Nova anything about your path..."
+          className="flex-1 bg-[#F0F0F0] border-2 border-[#121212] px-3 py-2 text-xs font-bold text-[#121212] placeholder:text-[#4A4A4A] focus:outline-none focus:bg-white"
+        />
+        <button
+          type="submit"
+          className="bg-[#D02020] text-white border-2 border-[#121212] shadow-[2px_2px_0px_0px_#121212] px-3.5 py-2 btn-press hover:bg-[#D02020]/90 transition"
+          aria-label="Send"
+        >
+          <Send className="h-3.5 w-3.5" />
         </button>
-      </div>
-    </motion.div>
-  );
-}
-
-function TypingBubble({ children, delay }: { children: string; delay: number }) {
-  const full = children;
-  const [shown, setShown] = useState("");
-  const [started, setStarted] = useState(false);
-  const [done, setDone] = useState(false);
-
-  useEffect(() => {
-    const t = setTimeout(() => setStarted(true), delay * 1000);
-    return () => clearTimeout(t);
-  }, [delay]);
-
-  useEffect(() => {
-    if (!started) return;
-    let i = 0;
-    const id = setInterval(() => {
-      i++;
-      setShown(full.slice(0, i));
-      if (i >= full.length) { clearInterval(id); setDone(true); }
-    }, 22);
-    return () => clearInterval(id);
-  }, [started, full]);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: started ? 1 : 0, y: started ? 0 : 8 }}
-      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-      className="flex justify-start"
-    >
-      <div className={`max-w-[85%] rounded-2xl rounded-bl-md px-3.5 py-2.5 text-[13px] leading-snug bg-white/[0.04] text-foreground border border-white/[0.05] ${!done ? "typing-cursor" : ""}`}>
-        {started ? shown : "\u00A0"}
-      </div>
-    </motion.div>
-  );
-}
-
-function Bubble({
-  side,
-  delay,
-  children,
-}: {
-  side: "ai" | "user";
-  delay: number;
-  children: React.ReactNode;
-}) {
-  const isUser = side === "user";
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={`flex ${isUser ? "justify-end" : "justify-start"}`}
-    >
-      <div
-        className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-[13px] leading-snug ${
-          isUser
-            ? "bg-foreground text-background rounded-br-md"
-            : "bg-white/[0.04] text-foreground rounded-bl-md border border-white/[0.05]"
-        }`}
-      >
-        {children}
-      </div>
-    </motion.div>
+      </form>
+    </div>
   );
 }

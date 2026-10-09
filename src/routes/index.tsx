@@ -3,6 +3,7 @@ import { AuroraBackground } from "@/components/Aurora";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/landing/Hero";
 import { Stats } from "@/components/landing/Stats";
+import { TechSpotlight } from "@/components/landing/TechSpotlight";
 import { Features } from "@/components/landing/Features";
 import { Careers } from "@/components/landing/Careers";
 import { ChatbotDemo } from "@/components/landing/ChatbotDemo";
@@ -22,6 +23,7 @@ function Landing() {
       <main>
         <Hero />
         <Stats />
+        <TechSpotlight />
         <Features />
         <Careers />
         <ChatbotDemo />

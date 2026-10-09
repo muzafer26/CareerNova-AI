@@ -10,13 +10,13 @@ CareerNova AI is a modern AI-powered career development platform designed to hel
 
 An intelligent AI-powered mentor that helps users with:
 
-* Career guidance
-* Learning roadmaps
-* Technology recommendations
-* Interview preparation
-* Coding advice
-* Skill development
-* Career planning
+- Career guidance
+- Learning roadmaps
+- Technology recommendations
+- Interview preparation
+- Coding advice
+- Skill development
+- Career planning
 
 Powered by Groq Llama AI.
 
@@ -26,12 +26,12 @@ Powered by Groq Llama AI.
 
 Upload your resume and receive:
 
-* ATS Score Analysis
-* Skill Gap Detection
-* Resume Feedback
-* Keyword Optimization
-* Career Fit Suggestions
-* Improvement Recommendations
+- ATS Score Analysis
+- Skill Gap Detection
+- Resume Feedback
+- Keyword Optimization
+- Career Fit Suggestions
+- Improvement Recommendations
 
 ---
 
@@ -39,12 +39,12 @@ Upload your resume and receive:
 
 Search and explore:
 
-* Remote Jobs
-* AI/ML Roles
-* Frontend & Backend Jobs
-* Internships
-* Full-Time Opportunities
-* International Opportunities
+- Remote Jobs
+- AI/ML Roles
+- Frontend & Backend Jobs
+- Internships
+- Full-Time Opportunities
+- International Opportunities
 
 Integrated with real job APIs.
 
@@ -54,12 +54,12 @@ Integrated with real job APIs.
 
 Access:
 
-* Programming Books
-* Learning Resources
-* Educational Platforms
-* Career Materials
-* Development Guides
-* Curated Learning Content
+- Programming Books
+- Learning Resources
+- Educational Platforms
+- Career Materials
+- Development Guides
+- Curated Learning Content
 
 ---
 
@@ -67,11 +67,11 @@ Access:
 
 Take a smart AI-based quiz to discover:
 
-* Best career paths
-* Suitable tech domains
-* Personalized recommendations
-* Strength analysis
-* Learning directions
+- Best career paths
+- Suitable tech domains
+- Personalized recommendations
+- Strength analysis
+- Learning directions
 
 ---
 
@@ -79,14 +79,14 @@ Take a smart AI-based quiz to discover:
 
 Explore roadmaps for:
 
-* Frontend Development
-* Backend Development
-* Full Stack Development
-* AI Engineering
-* Data Science
-* Cybersecurity
-* Cloud Computing
-* App Development
+- Frontend Development
+- Backend Development
+- Full Stack Development
+- AI Engineering
+- Data Science
+- Cybersecurity
+- Cloud Computing
+- App Development
 
 ---
 
@@ -94,31 +94,31 @@ Explore roadmaps for:
 
 ## Frontend
 
-* React.js
-* Vite
-* TypeScript
-* Tailwind CSS
-* Framer Motion
+- React.js
+- Vite
+- TypeScript
+- Tailwind CSS
+- Framer Motion
 
 ## Backend
 
-* Vercel Serverless Functions
-* Supabase
+- Vercel Serverless Functions
+- Supabase
 
 ## APIs & AI
 
-* Groq API
-* Adzuna API
-* Open Library API
+- Groq API
+- Adzuna API
+- Open Library API
 
 ---
 
 # 🔐 Authentication
 
-* Supabase Authentication
-* Secure Login & Signup
-* Protected Routes
-* Session Management
+- Supabase Authentication
+- Secure Login & Signup
+- Protected Routes
+- Session Management
 
 ---
 
@@ -184,20 +184,20 @@ ADZUNA_APP_KEY=your_adzuna_app_key
 
 This project is deployed using:
 
-* GitHub
-* Vercel
+- GitHub
+- Vercel
 
 ---
 
 # 📌 Future Improvements
 
-* AI Mock Interviews
-* Resume Builder
-* Portfolio Generator
-* AI Voice Mentor
-* Skill Tracking Dashboard
-* Community Features
-* Personalized AI Recommendations
+- AI Mock Interviews
+- Resume Builder
+- Portfolio Generator
+- AI Voice Mentor
+- Skill Tracking Dashboard
+- Community Features
+- Personalized AI Recommendations
 
 ---
 

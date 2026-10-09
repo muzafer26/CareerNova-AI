@@ -33,13 +33,16 @@ const now = Date.now();
 const days = (n: number) => now - n * 86400000;
 
 const ext = {
-  linkedin: (q: string) => `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(q)}`,
+  linkedin: (q: string) =>
+    `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(q)}`,
   wellfound: (q: string) => `https://wellfound.com/jobs?q=${encodeURIComponent(q)}`,
   internshala: (q: string) =>
     `https://internshala.com/internships/keywords-${encodeURIComponent(q.toLowerCase().replace(/\s+/g, "-"))}`,
   indeed: (q: string) => `https://www.indeed.com/jobs?q=${encodeURIComponent(q)}`,
-  naukri: (q: string) => `https://www.naukri.com/${encodeURIComponent(q.toLowerCase().replace(/\s+/g, "-"))}-jobs`,
-  glassdoor: (q: string) => `https://www.glassdoor.com/Job/jobs.htm?sc.keyword=${encodeURIComponent(q)}`,
+  naukri: (q: string) =>
+    `https://www.naukri.com/${encodeURIComponent(q.toLowerCase().replace(/\s+/g, "-"))}-jobs`,
+  glassdoor: (q: string) =>
+    `https://www.glassdoor.com/Job/jobs.htm?sc.keyword=${encodeURIComponent(q)}`,
 };
 
 export const popularLocations = [
@@ -81,7 +84,8 @@ export const jobs: Job[] = [
     postedAt: days(2),
     applyUrl: ext.linkedin("Frontend Engineer Vercel"),
     source: "LinkedIn",
-    companyAbout: "Vercel is the platform for frontend developers, providing speed and reliability for the modern web.",
+    companyAbout:
+      "Vercel is the platform for frontend developers, providing speed and reliability for the modern web.",
     matchHints: ["frontend", "fullstack"],
   },
   {
@@ -109,7 +113,8 @@ export const jobs: Job[] = [
     postedAt: days(1),
     applyUrl: ext.linkedin("AI Engineer OpenAI"),
     source: "LinkedIn",
-    companyAbout: "OpenAI's mission is to ensure that artificial general intelligence benefits all of humanity.",
+    companyAbout:
+      "OpenAI's mission is to ensure that artificial general intelligence benefits all of humanity.",
     matchHints: ["ai", "data"],
   },
   {
@@ -125,7 +130,8 @@ export const jobs: Job[] = [
     salaryMin: 90,
     skills: ["Node.js", "React", "PostgreSQL", "AWS"],
     category: "fullstack",
-    description: "Power India's payments infrastructure. Ship features that move billions in transactions monthly.",
+    description:
+      "Power India's payments infrastructure. Ship features that move billions in transactions monthly.",
     responsibilities: [
       "Own end-to-end product features",
       "Design scalable APIs and data models",
@@ -152,7 +158,8 @@ export const jobs: Job[] = [
     salaryMin: 140,
     skills: ["Figma", "Motion", "Design Systems", "Prototyping"],
     category: "design",
-    description: "Design the tool the best software teams use to build their products. Obsess over craft and detail.",
+    description:
+      "Design the tool the best software teams use to build their products. Obsess over craft and detail.",
     responsibilities: [
       "Own complex product surfaces end-to-end",
       "Build and evolve our design system",
@@ -163,7 +170,8 @@ export const jobs: Job[] = [
     postedAt: days(4),
     applyUrl: ext.wellfound("Product Designer Linear"),
     source: "Wellfound",
-    companyAbout: "Linear is a purpose-built tool for planning and building products, used by the world's best teams.",
+    companyAbout:
+      "Linear is a purpose-built tool for planning and building products, used by the world's best teams.",
     matchHints: ["design"],
   },
   {
@@ -207,7 +215,8 @@ export const jobs: Job[] = [
     salaryMin: 100,
     skills: ["Kubernetes", "Terraform", "AWS", "CI/CD", "Linux"],
     category: "devops",
-    description: "Run one of the fastest networks on Earth. Ship reliability improvements that affect millions of sites.",
+    description:
+      "Run one of the fastest networks on Earth. Ship reliability improvements that affect millions of sites.",
     responsibilities: [
       "Operate global Kubernetes clusters",
       "Improve deployment pipelines",
@@ -234,7 +243,8 @@ export const jobs: Job[] = [
     salaryMin: 70,
     skills: ["Networking", "SIEM", "Python", "Linux"],
     category: "cybersec",
-    description: "Defend enterprise systems against modern threats. Monitor, investigate, and respond to incidents.",
+    description:
+      "Defend enterprise systems against modern threats. Monitor, investigate, and respond to incidents.",
     responsibilities: ["Monitor SIEM dashboards", "Triage alerts", "Document incidents"],
     benefits: ["Health insurance", "Cab service", "Training certifications"],
     postedDate: "1w ago",
@@ -257,8 +267,13 @@ export const jobs: Job[] = [
     salaryMin: 80,
     skills: ["React Native", "TypeScript", "iOS", "Android"],
     category: "mobile",
-    description: "Build the app millions order food on every day. Care deeply about smooth UX on flaky networks.",
-    responsibilities: ["Build cross-platform features", "Optimize app performance", "Work with native modules"],
+    description:
+      "Build the app millions order food on every day. Care deeply about smooth UX on flaky networks.",
+    responsibilities: [
+      "Build cross-platform features",
+      "Optimize app performance",
+      "Work with native modules",
+    ],
     benefits: ["ESOPs", "Meals", "Hybrid"],
     postedDate: "2d ago",
     postedAt: days(2),
@@ -280,8 +295,13 @@ export const jobs: Job[] = [
     salaryMin: 160,
     skills: ["AWS", "Architecture", "Networking", "Security"],
     category: "cloud",
-    description: "Help enterprises in MENA build on AWS. Design solutions that scale to millions of users.",
-    responsibilities: ["Design cloud architectures", "Lead workshops", "Guide enterprise migrations"],
+    description:
+      "Help enterprises in MENA build on AWS. Design solutions that scale to millions of users.",
+    responsibilities: [
+      "Design cloud architectures",
+      "Lead workshops",
+      "Guide enterprise migrations",
+    ],
     benefits: ["Stock", "Relocation", "Insurance"],
     postedDate: "3d ago",
     postedAt: days(3),
@@ -330,7 +350,8 @@ export const jobs: Job[] = [
     duration: "6 months",
     skills: ["React", "JavaScript", "CSS"],
     category: "frontend",
-    description: "Work alongside senior engineers shipping features for one of India's most loved apps.",
+    description:
+      "Work alongside senior engineers shipping features for one of India's most loved apps.",
     responsibilities: ["Build UI components", "Fix bugs", "Write tests"],
     benefits: ["Stipend", "Pre-placement offer", "Mentorship"],
     postedDate: "1d ago",
@@ -405,7 +426,8 @@ export const jobs: Job[] = [
     duration: "6 months",
     skills: ["SQL", "Python", "Excel", "Tableau"],
     category: "data",
-    description: "Turn billions of data points into product decisions for India's largest e-commerce platform.",
+    description:
+      "Turn billions of data points into product decisions for India's largest e-commerce platform.",
     responsibilities: ["Build dashboards", "Run analyses", "Present insights"],
     benefits: ["Stipend", "PPO chance", "Mentorship"],
     postedDate: "5d ago",

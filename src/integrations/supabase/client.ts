@@ -1,13 +1,15 @@
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "./types";
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
-const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string;
+const SUPABASE_URL =
+  (import.meta.env.VITE_SUPABASE_URL as string) || "https://placeholder-careernova.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY =
+  (import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string) || "placeholder-anon-key";
 
-if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
-  // Surface a helpful console error without crashing module load.
-  console.error(
-    "[Supabase] Missing VITE_SUPABASE_URL or VITE_SUPABASE_PUBLISHABLE_KEY. Set them in your environment.",
+if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY) {
+  // Surface a helpful console warning without crashing module load.
+  console.warn(
+    "[Supabase] Missing VITE_SUPABASE_URL or VITE_SUPABASE_PUBLISHABLE_KEY. Running with offline/guest mode fallback.",
   );
 }
 

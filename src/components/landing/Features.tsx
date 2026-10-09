@@ -1,110 +1,147 @@
-import { motion } from "framer-motion";
-import {
-  Compass,
-  FileSearch,
-  Mic,
-  Map as MapIcon,
-  Briefcase,
-  MessageCircle,
-} from "lucide-react";
-
-const ease = [0.22, 1, 0.36, 1] as const;
+import { Compass, FileSearch, Mic, Map as MapIcon, Briefcase, MessageCircle } from "lucide-react";
 
 const features = [
   {
     icon: Compass,
-    eyebrow: "001 — Direction",
-    title: "A mentor who knows you.",
-    desc: "Nova reads your story, not your résumé. Conversations that nudge you toward work that fits — not work that pays best on paper.",
-    span: "lg:col-span-7",
+    eyebrow: "MODULE 01 · DIRECTION",
+    title: "AI CAREER MENTOR",
+    desc: "Personalized constructivist advice from an always-on mentor that maps your skills, interests, and salary goals into actionable milestones.",
+    cornerShape: "circle",
+    cornerColor: "#D02020",
+    accentBg: "bg-[#D02020]",
   },
   {
     icon: MapIcon,
-    eyebrow: "002 — Roadmap",
-    title: "One map. Yours.",
-    desc: "Every roadmap is drawn from your strengths, gaps, and time. No copy-paste curriculums.",
-    span: "lg:col-span-5",
+    eyebrow: "MODULE 02 · ARCHITECTURE",
+    title: "STRUCTURED ROADMAPS",
+    desc: "Every roadmap is an engineered blueprint from beginner to senior. Step-by-step milestones, vetted free tutorials, and portfolio projects.",
+    cornerShape: "square",
+    cornerColor: "#1040C0",
+    accentBg: "bg-[#1040C0]",
   },
   {
     icon: FileSearch,
-    eyebrow: "003 — Résumé",
-    title: "ATS, decoded.",
-    desc: "Upload once. Get the score, the missing keywords, and a rewrite that still sounds like you.",
-    span: "lg:col-span-5",
+    eyebrow: "MODULE 03 · VERIFICATION",
+    title: "ATS RESUME SCANNER",
+    desc: "Audit your resume against modern ATS algorithmic filters. Receive an instant score, keyword gaps, and recruiter-grade bullet point rewrites.",
+    cornerShape: "triangle",
+    cornerColor: "#F0C020",
+    accentBg: "bg-[#F0C020]",
   },
   {
     icon: Briefcase,
-    eyebrow: "004 — Opportunities",
-    title: "A real jobs feed.",
-    desc: "Live listings — internships, remote, full-time. Filtered by where you are and where you're heading.",
-    span: "lg:col-span-7",
+    eyebrow: "MODULE 04 · OPPORTUNITY",
+    title: "LIVE JOBS & INTERNSHIPS",
+    desc: "Aggregated, verified listings filtered by remote status, contract type, experience level, and compensation benchmarks.",
+    cornerShape: "rot-square",
+    cornerColor: "#121212",
+    accentBg: "bg-[#121212]",
   },
   {
     icon: Mic,
-    eyebrow: "005 — Interview",
-    title: "Rehearse with someone tough.",
-    desc: "HR and technical drills with feedback that's honest, not nice.",
-    span: "lg:col-span-6",
+    eyebrow: "MODULE 05 · REHEARSAL",
+    title: "MOCK INTERVIEW DRILLS",
+    desc: "Simulate rigorous technical and behavioral interview scenarios with immediate diagnostic scoring and feedback.",
+    cornerShape: "circle",
+    cornerColor: "#D02020",
+    accentBg: "bg-[#D02020]",
   },
   {
     icon: MessageCircle,
-    eyebrow: "006 — Always on",
-    title: "3am questions, welcome.",
-    desc: "Nova doesn't keep office hours. Neither does ambition.",
-    span: "lg:col-span-6",
+    eyebrow: "MODULE 06 · KNOWLEDGE",
+    title: "CURATED RESOURCE HUB",
+    desc: "Open Library books, comprehensive YouTube masterclasses, and verified community references organized by engineering discipline.",
+    cornerShape: "square",
+    cornerColor: "#1040C0",
+    accentBg: "bg-[#1040C0]",
   },
 ];
 
 export function Features() {
   return (
-    <section id="features" className="relative py-32 md:py-40 px-6 md:px-10">
-      <div className="mx-auto max-w-[1280px]">
-        <div className="grid grid-cols-12 gap-y-10 md:gap-x-10 mb-20">
-          <div className="col-span-12 md:col-span-7">
-            <div className="eyebrow mb-6">— What's inside</div>
-            <h2 className="font-serif text-5xl md:text-7xl leading-[0.95] tracking-[-0.02em] text-balance">
-              Six tools.<br />
-              <span className="italic text-muted-foreground">One quiet system.</span>
+    <section
+      id="features"
+      className="relative py-20 md:py-28 px-4 sm:px-6 lg:px-8 border-b-4 border-[#121212] bg-[#F0F0F0]"
+    >
+      <div className="max-w-7xl mx-auto">
+        {/* Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b-4 border-[#121212] mb-12">
+          <div>
+            <div className="inline-block bg-[#1040C0] text-white px-3 py-1 text-xs font-black uppercase tracking-widest mb-3">
+              SYSTEM CAPABILITIES
+            </div>
+            <h2 className="font-display font-black text-4xl sm:text-6xl uppercase tracking-tighter text-[#121212] leading-[0.95]">
+              SIX ESSENTIAL <br />
+              <span className="text-[#D02020]">BUILDING BLOCKS.</span>
             </h2>
           </div>
-          <div className="col-span-12 md:col-span-4 md:col-start-9 self-end max-w-sm text-muted-foreground text-[15px] leading-relaxed">
-            Not a dashboard of dashboards. CareerNova is a deliberately small
-            set of things, made carefully, that work together.
-          </div>
+          <p className="max-w-md text-sm sm:text-base font-bold text-[#121212] leading-relaxed">
+            Eliminating guesswork with mathematically structured career tools engineered for clarity
+            and execution.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 md:gap-4">
-          {features.map((f, i) => (
-            <motion.article
+        {/* 3-Column Bauhaus Card Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {features.map((f) => (
+            <article
               key={f.title}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.7, delay: (i % 3) * 0.06, ease }}
-              whileHover={{ y: -3 }}
-              className={`group relative ${f.span} surface rounded-2xl p-7 md:p-8 overflow-hidden`}
+              className="group relative bg-white border-4 border-[#121212] p-7 shadow-[8px_8px_0px_0px_#121212] hover:-translate-y-1.5 transition-transform duration-200 flex flex-col justify-between"
             >
-              <div className="pointer-events-none absolute -top-24 -right-20 h-56 w-56 rounded-full opacity-0 group-hover:opacity-100 transition duration-700 blur-3xl"
-                style={{ background: "radial-gradient(circle, oklch(0.84 0.13 78 / 0.25), transparent 60%)" }}
-              />
-
-              <div className="relative flex items-start gap-4">
-                <div className="grid place-items-center h-9 w-9 rounded-lg bg-white/[0.04] border border-white/[0.06]">
-                  <f.icon className="h-4 w-4 text-foreground/80" strokeWidth={1.5} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-muted-foreground/80">
-                    {f.eyebrow}
-                  </div>
-                  <h3 className="mt-3 font-serif text-2xl md:text-[28px] leading-[1.1] tracking-[-0.01em]">
-                    {f.title}
-                  </h3>
-                  <p className="mt-3 text-[14.5px] leading-relaxed text-muted-foreground max-w-prose">
-                    {f.desc}
-                  </p>
-                </div>
+              {/* Corner Geometric Decoration */}
+              <div className="absolute top-4 right-4" aria-hidden="true">
+                {f.cornerShape === "circle" && (
+                  <span
+                    className="block w-4 h-4 rounded-full border-2 border-[#121212]"
+                    style={{ backgroundColor: f.cornerColor }}
+                  />
+                )}
+                {f.cornerShape === "square" && (
+                  <span
+                    className="block w-4 h-4 rounded-none border-2 border-[#121212]"
+                    style={{ backgroundColor: f.cornerColor }}
+                  />
+                )}
+                {f.cornerShape === "triangle" && (
+                  <span
+                    className="block w-4 h-4 clip-triangle border-2 border-[#121212]"
+                    style={{ backgroundColor: f.cornerColor }}
+                  />
+                )}
+                {f.cornerShape === "rot-square" && (
+                  <span
+                    className="block w-3.5 h-3.5 rounded-none rotate-45 border-2 border-[#121212]"
+                    style={{ backgroundColor: f.cornerColor }}
+                  />
+                )}
               </div>
-            </motion.article>
+
+              <div>
+                {/* Icon in white bordered box with shadow */}
+                <div className="w-12 h-12 bg-white border-2 border-[#121212] shadow-[3px_3px_0px_0px_#121212] flex items-center justify-center mb-6 group-hover:scale-105 transition-transform">
+                  <f.icon className="h-6 w-6 text-[#121212]" strokeWidth={2.5} />
+                </div>
+
+                {/* Eyebrow Label */}
+                <div className="text-[11px] font-black uppercase tracking-widest text-[#4A4A4A] mb-2">
+                  {f.eyebrow}
+                </div>
+
+                {/* Card Title */}
+                <h3 className="font-display font-black text-2xl uppercase tracking-tight text-[#121212]">
+                  {f.title}
+                </h3>
+
+                {/* Card Description */}
+                <p className="mt-3 text-sm font-medium text-[#4A4A4A] leading-relaxed">{f.desc}</p>
+              </div>
+
+              {/* Bottom Bauhaus Accent Line */}
+              <div className="mt-8 pt-4 border-t-2 border-[#121212] flex items-center justify-between text-xs font-black uppercase tracking-wider text-[#121212]">
+                <span>STATUS // FUNCTIONAL</span>
+                <span className="w-2.5 h-2.5 rounded-full bg-[#121212] group-hover:bg-[#D02020] transition-colors" />
+              </div>
+            </article>
           ))}
         </div>
       </div>

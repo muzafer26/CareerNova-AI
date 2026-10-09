@@ -28,7 +28,10 @@ function CareersLibrary() {
 
   const filtered = useMemo(() => {
     return careers.filter((c) => {
-      if (q && !`${c.title} ${c.skills.join(" ")} ${c.description}`.toLowerCase().includes(q.toLowerCase()))
+      if (
+        q &&
+        !`${c.title} ${c.skills.join(" ")} ${c.description}`.toLowerCase().includes(q.toLowerCase())
+      )
         return false;
       if (demand !== "All" && c.demand !== demand) return false;
       if (diff !== "All" && c.difficulty !== diff) return false;

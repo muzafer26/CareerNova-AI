@@ -1,89 +1,125 @@
-import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 
 const tiers = [
   {
-    name: "Free",
+    name: "FOUNDATION",
     price: "$0",
-    desc: "Get started, explore careers",
-    features: ["AI career quiz", "5 mentor messages / day", "Basic roadmaps", "1 resume scan / month"],
-    cta: "Start free",
+    desc: "Essential exploration modules",
+    features: [
+      "AI career diagnostic quiz",
+      "5 mentor messages / day",
+      "Core engineering roadmaps",
+      "1 resume ATS audit / month",
+    ],
+    cta: "Start Free",
     featured: false,
+    color: "bg-white",
   },
   {
-    name: "Pro",
+    name: "ENGINEER PRO",
     price: "$9",
-    desc: "For serious career hunters",
-    features: ["Unlimited AI mentor", "Resume + ATS analyzer", "Mock interviews (HR + tech)", "Personal roadmaps", "Skill tracking"],
+    desc: "For rigorous career acceleration",
+    features: [
+      "Unlimited AI mentor feedback",
+      "Resume ATS deep scoring & rewrites",
+      "Mock interviews (tech & HR drills)",
+      "ScholarSync IT deep dive modules",
+      "Skill prerequisite tracking",
+    ],
     cta: "Go Pro",
     featured: true,
+    color: "bg-[#F0C020]",
   },
   {
-    name: "Premium",
+    name: "LEADERSHIP",
     price: "$19",
-    desc: "Land the dream role",
-    features: ["Everything in Pro", "1:1 human mentor calls", "Internship priority feed", "Portfolio reviews", "LinkedIn rewrite"],
+    desc: "For senior & staff career pivots",
+    features: [
+      "Everything in Engineer Pro",
+      "Portfolio proof architecture review",
+      "Internship & role priority feed",
+      "Direct roadmap fork customization",
+      "LinkedIn & GitHub profile audit",
+    ],
     cta: "Go Premium",
     featured: false,
+    color: "bg-white",
   },
 ];
 
 export function Pricing() {
   return (
-    <section id="pricing" className="relative py-32 px-6">
-      <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <div className="inline-block glass rounded-full px-3 py-1 text-xs text-muted-foreground mb-4">Pricing</div>
-          <h2 className="font-display text-4xl md:text-6xl font-bold tracking-tight">
-            Simple, <span className="gradient-text">honest</span> pricing
+    <section
+      id="pricing"
+      className="relative py-24 px-4 sm:px-6 lg:px-8 border-b-4 border-[#121212] bg-[#F0F0F0]"
+    >
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 bg-[#D02020] text-white border-2 border-[#121212] px-3.5 py-1 text-xs font-mono font-black uppercase tracking-widest shadow-[2px_2px_0px_0px_#121212] mb-4">
+            TARIFFS · HONEST & TRANSPARENT
+          </div>
+          <h2 className="font-display font-black text-4xl sm:text-6xl uppercase tracking-tighter text-[#121212]">
+            PREDICTABLE <span className="text-[#1040C0]">PRICING.</span>
           </h2>
-        </motion.div>
+          <p className="font-mono text-xs sm:text-sm text-[#4A4A4A] mt-3">
+            Zero hidden recurring fees. Cancel anytime with a single click.
+          </p>
+        </div>
 
-        <div className="grid md:grid-cols-3 gap-5">
-          {tiers.map((t, i) => (
-            <motion.div
+        <div className="grid md:grid-cols-3 gap-8 items-stretch">
+          {tiers.map((t) => (
+            <div
               key={t.name}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className={`relative rounded-3xl p-8 ${t.featured ? "glass-strong elevated-shadow" : "glass"}`}
+              className={`border-4 border-[#121212] p-8 flex flex-col justify-between relative transition ${
+                t.featured
+                  ? "bg-[#F0C020] shadow-bauhaus-lg -translate-y-2"
+                  : "bg-white shadow-bauhaus"
+              }`}
             >
               {t.featured && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 aurora-bg text-background text-xs font-medium px-3 py-1 rounded-full">
-                  Most popular
+                <div className="absolute -top-4 left-6 bg-[#D02020] text-white border-2 border-[#121212] text-[10px] font-mono font-black uppercase tracking-widest px-3 py-1 shadow-[2px_2px_0px_0px_#121212]">
+                  ★ MOST POPULAR TIER
                 </div>
               )}
-              <div className="font-display font-semibold text-lg">{t.name}</div>
-              <div className="mt-2 text-sm text-muted-foreground">{t.desc}</div>
-              <div className="mt-6 flex items-baseline gap-1">
-                <span className="font-display text-5xl font-bold">{t.price}</span>
-                <span className="text-muted-foreground text-sm">/month</span>
+
+              <div>
+                <div className="font-mono text-xs font-black uppercase tracking-widest text-[#121212] mb-1">
+                  {t.name}
+                </div>
+                <div className="text-xs font-medium text-[#4A4A4A] mb-6">{t.desc}</div>
+
+                <div className="flex items-baseline gap-1 border-b-2 border-[#121212] pb-6 mb-6">
+                  <span className="font-display font-black text-6xl text-[#121212]">{t.price}</span>
+                  <span className="font-mono text-xs font-bold text-[#4A4A4A]">/ month</span>
+                </div>
+
+                <ul className="space-y-3 mb-8">
+                  {t.features.map((f) => (
+                    <li
+                      key={f}
+                      className="flex items-start gap-2.5 text-xs font-bold text-[#121212]"
+                    >
+                      <span className="w-4 h-4 bg-[#121212] text-white flex items-center justify-center shrink-0 border border-[#121212]">
+                        <Check className="h-3 w-3 text-white" />
+                      </span>
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
+
               <Link
                 to="/signup"
-                className={`mt-6 block text-center w-full px-5 py-3 rounded-xl font-medium transition ${
-                  t.featured ? "aurora-bg text-background glow-shadow hover:opacity-90" : "glass-strong hover:bg-white/10"
+                className={`w-full block text-center py-3.5 font-mono text-xs font-black uppercase border-2 border-[#121212] shadow-[3px_3px_0px_0px_#121212] btn-press transition ${
+                  t.featured
+                    ? "bg-[#D02020] text-white hover:bg-[#D02020]/90"
+                    : "bg-[#121212] text-white hover:bg-[#D02020]"
                 }`}
               >
-                {t.cta}
+                {t.cta} →
               </Link>
-              <ul className="mt-8 space-y-3">
-                {t.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-sm">
-                    <Check className="h-4 w-4 text-accent flex-shrink-0 mt-0.5" />
-                    <span>{f}</span>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

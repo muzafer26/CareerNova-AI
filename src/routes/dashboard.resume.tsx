@@ -37,7 +37,15 @@ type Analysis = {
   nextSteps: string[];
 };
 
-function ScoreRing({ value, label, accent = false }: { value: number; label: string; accent?: boolean }) {
+function ScoreRing({
+  value,
+  label,
+  accent = false,
+}: {
+  value: number;
+  label: string;
+  accent?: boolean;
+}) {
   const r = 44;
   const c = 2 * Math.PI * r;
   const off = c - (Math.max(0, Math.min(100, value)) / 100) * c;
@@ -45,7 +53,15 @@ function ScoreRing({ value, label, accent = false }: { value: number; label: str
     <div className="flex flex-col items-center">
       <div className="relative h-28 w-28">
         <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90">
-          <circle cx="50" cy="50" r={r} stroke="currentColor" strokeOpacity="0.1" strokeWidth="8" fill="none" />
+          <circle
+            cx="50"
+            cy="50"
+            r={r}
+            stroke="currentColor"
+            strokeOpacity="0.1"
+            strokeWidth="8"
+            fill="none"
+          />
           <motion.circle
             cx="50"
             cy="50"
@@ -79,13 +95,19 @@ function ScoreRing({ value, label, accent = false }: { value: number; label: str
   );
 }
 
-function FeedbackList({ icon: Icon, title, items, tone }: { icon: typeof CheckCircle2; title: string; items: string[]; tone: "good" | "warn" | "info" }) {
+function FeedbackList({
+  icon: Icon,
+  title,
+  items,
+  tone,
+}: {
+  icon: typeof CheckCircle2;
+  title: string;
+  items: string[];
+  tone: "good" | "warn" | "info";
+}) {
   const colors =
-    tone === "good"
-      ? "text-emerald-400"
-      : tone === "warn"
-        ? "text-amber-400"
-        : "text-cyan-400";
+    tone === "good" ? "text-emerald-400" : tone === "warn" ? "text-amber-400" : "text-cyan-400";
   return (
     <div className="glass rounded-2xl p-5">
       <div className={`flex items-center gap-2 mb-3 ${colors}`}>
@@ -110,7 +132,9 @@ function ResumePage() {
   const [filename, setFilename] = useState<string | null>(null);
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
   const [loading, setLoading] = useState(false);
-  const [history, setHistory] = useState<{ id: string; filename: string | null; score: number | null; created_at: string }[]>([]);
+  const [history, setHistory] = useState<
+    { id: string; filename: string | null; score: number | null; created_at: string }[]
+  >([]);
 
   useEffect(() => {
     if (!user) return;
@@ -137,7 +161,10 @@ function ResumePage() {
         return;
       }
       setText(extracted);
-      toast.success(`Extracted ${extracted.length.toLocaleString()} chars${pages ? ` from ${pages} page${pages > 1 ? "s" : ""}` : ""}`, { id: t });
+      toast.success(
+        `Extracted ${extracted.length.toLocaleString()} chars${pages ? ` from ${pages} page${pages > 1 ? "s" : ""}` : ""}`,
+        { id: t },
+      );
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Failed to read file", { id: t });
     } finally {
@@ -193,7 +220,9 @@ function ResumePage() {
           </div>
           <div>
             <h1 className="font-display text-2xl font-bold">Resume Analyzer</h1>
-            <p className="text-xs text-muted-foreground">ATS scoring · keyword gaps · career fit · powered by Groq Llama 3.3</p>
+            <p className="text-xs text-muted-foreground">
+              ATS scoring · keyword gaps · career fit · powered by Groq Llama 3.3
+            </p>
           </div>
         </div>
         {history.length > 0 && (
@@ -209,8 +238,16 @@ function ResumePage() {
       <div className="glass-strong rounded-3xl p-6 space-y-4">
         <div className="flex items-center justify-between flex-wrap gap-3">
           <label className="glass rounded-xl px-4 py-2.5 text-sm cursor-pointer flex items-center gap-2 hover:bg-white/10 transition">
-            {parsing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
-            {filename ? <span className="truncate max-w-[200px]">{filename}</span> : "Upload PDF, DOCX or TXT"}
+            {parsing ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Upload className="h-4 w-4" />
+            )}
+            {filename ? (
+              <span className="truncate max-w-[200px]">{filename}</span>
+            ) : (
+              "Upload PDF, DOCX or TXT"
+            )}
             <input
               type="file"
               accept=".txt,.md,text/plain,.pdf,application/pdf,.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
@@ -238,7 +275,11 @@ function ResumePage() {
 
       {/* Results */}
       {analysis && (
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="space-y-6"
+        >
           <div className="glass-strong rounded-3xl p-6 grid md:grid-cols-3 gap-6 items-center">
             <ScoreRing value={analysis.score} label="ATS Score" />
             <ScoreRing value={analysis.interviewReadiness} label="Interview Readiness" accent />
@@ -248,16 +289,38 @@ function ResumePage() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
-            <FeedbackList icon={CheckCircle2} title="Strengths" items={analysis.strengths} tone="good" />
-            <FeedbackList icon={AlertTriangle} title="Gaps" items={analysis.weaknesses} tone="warn" />
-            <FeedbackList icon={Hash} title="Missing keywords" items={analysis.missingKeywords} tone="info" />
-            <FeedbackList icon={Layout} title="Formatting" items={analysis.formatting} tone="info" />
+            <FeedbackList
+              icon={CheckCircle2}
+              title="Strengths"
+              items={analysis.strengths}
+              tone="good"
+            />
+            <FeedbackList
+              icon={AlertTriangle}
+              title="Gaps"
+              items={analysis.weaknesses}
+              tone="warn"
+            />
+            <FeedbackList
+              icon={Hash}
+              title="Missing keywords"
+              items={analysis.missingKeywords}
+              tone="info"
+            />
+            <FeedbackList
+              icon={Layout}
+              title="Formatting"
+              items={analysis.formatting}
+              tone="info"
+            />
           </div>
 
           <div className="glass-strong rounded-3xl p-6">
             <div className="flex items-center gap-2 mb-4 text-primary">
               <Compass className="h-4 w-4" />
-              <h3 className="font-display font-semibold text-sm uppercase tracking-wide">Career fit</h3>
+              <h3 className="font-display font-semibold text-sm uppercase tracking-wide">
+                Career fit
+              </h3>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
               {analysis.careerMatches?.map((m, i) => (
@@ -280,16 +343,33 @@ function ResumePage() {
             </div>
           </div>
 
-          {(analysis.skillGaps?.length || analysis.projectIdeas?.length || analysis.roadmap?.length) ? (
+          {analysis.skillGaps?.length ||
+          analysis.projectIdeas?.length ||
+          analysis.roadmap?.length ? (
             <div className="grid md:grid-cols-3 gap-4">
               {analysis.skillGaps?.length ? (
-                <FeedbackList icon={AlertTriangle} title="Skill gaps" items={analysis.skillGaps} tone="warn" />
+                <FeedbackList
+                  icon={AlertTriangle}
+                  title="Skill gaps"
+                  items={analysis.skillGaps}
+                  tone="warn"
+                />
               ) : null}
               {analysis.projectIdeas?.length ? (
-                <FeedbackList icon={Sparkles} title="Project ideas" items={analysis.projectIdeas} tone="info" />
+                <FeedbackList
+                  icon={Sparkles}
+                  title="Project ideas"
+                  items={analysis.projectIdeas}
+                  tone="info"
+                />
               ) : null}
               {analysis.roadmap?.length ? (
-                <FeedbackList icon={Compass} title="90-day roadmap" items={analysis.roadmap} tone="good" />
+                <FeedbackList
+                  icon={Compass}
+                  title="90-day roadmap"
+                  items={analysis.roadmap}
+                  tone="good"
+                />
               ) : null}
             </div>
           ) : null}
@@ -302,11 +382,16 @@ function ResumePage() {
         <div className="glass-strong rounded-3xl p-6">
           <div className="flex items-center gap-2 mb-3 text-muted-foreground">
             <Sparkles className="h-4 w-4" />
-            <h3 className="font-display font-semibold text-sm uppercase tracking-wide">Recent analyses</h3>
+            <h3 className="font-display font-semibold text-sm uppercase tracking-wide">
+              Recent analyses
+            </h3>
           </div>
           <div className="space-y-2">
             {history.map((h) => (
-              <div key={h.id} className="glass rounded-xl p-3 flex items-center justify-between text-sm">
+              <div
+                key={h.id}
+                className="glass rounded-xl p-3 flex items-center justify-between text-sm"
+              >
                 <span className="truncate">{h.filename ?? "Resume"}</span>
                 <span className="gradient-text font-semibold">{h.score ?? "—"}/100</span>
               </div>

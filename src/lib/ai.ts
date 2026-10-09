@@ -8,7 +8,8 @@ export async function aiChat(messages: ChatMsg[], model?: string): Promise<strin
     body: JSON.stringify({ mode: "chat", messages, model }),
   });
   if (res.status === 429) throw new Error("Rate limit hit, please try again in a minute.");
-  if (res.status === 402) throw new Error("AI credits exhausted. Add credits in Lovable Cloud settings.");
+  if (res.status === 402)
+    throw new Error("AI credits exhausted. Add credits in Lovable Cloud settings.");
   if (!res.ok) throw new Error("AI request failed");
   const j = await res.json();
   return j.content as string;

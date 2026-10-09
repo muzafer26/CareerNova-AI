@@ -61,7 +61,9 @@ function RoadmapPage() {
           .maybeSingle(),
       ]);
       if (!alive) return;
-      const done = new Set<string>(((progress.data as any) ?? []).map((r: any) => r.step_key as string));
+      const done = new Set<string>(
+        ((progress.data as any) ?? []).map((r: any) => r.step_key as string),
+      );
       setCompleted(done);
       setSaved(!!savedRow.data);
     })();
@@ -82,9 +84,12 @@ function RoadmapPage() {
         .eq("step_key", stepKey);
     } else {
       next.add(stepKey);
-      await supabase
-        .from("roadmap_progress" as never)
-        .upsert({ user_id: user.id, career_key: career.key, step_key: stepKey, completed: true } as any);
+      await supabase.from("roadmap_progress" as never).upsert({
+        user_id: user.id,
+        career_key: career.key,
+        step_key: stepKey,
+        completed: true,
+      } as any);
       await supabase.from("learning_activity" as never).insert({
         user_id: user.id,
         kind: "roadmap_step",
@@ -97,7 +102,10 @@ function RoadmapPage() {
   const toggleSave = async () => {
     if (!user) return toast.error("Sign in to save");
     if (saved) {
-      await supabase.from("saved_careers" as never).delete().eq("career_key", career.key);
+      await supabase
+        .from("saved_careers" as never)
+        .delete()
+        .eq("career_key", career.key);
       setSaved(false);
       toast.success("Removed from saved");
     } else {
@@ -289,7 +297,7 @@ function RoadmapPage() {
 
                     <AnimatePresence>
                       {isOpen && (
-                      <motion.div
+                        <motion.div
                           initial={{ height: 0, opacity: 0 }}
                           animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}

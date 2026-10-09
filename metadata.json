@@ -1,0 +1,5 @@
+{
+  "name": "CareerNova",
+  "description": "AI-powered career guidance, roadmaps, mock interviews and skill tracking for the next generation of builders.",
+  "capabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

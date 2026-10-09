@@ -91,13 +91,28 @@ function PremiumCard({
 }
 
 /* Radial progress ring */
-function RadialRing({ pct, size = 56, glow = "78" }: { pct: number; size?: number; glow?: string }) {
+function RadialRing({
+  pct,
+  size = 56,
+  glow = "78",
+}: {
+  pct: number;
+  size?: number;
+  glow?: string;
+}) {
   const r = (size - 6) / 2;
   const c = 2 * Math.PI * r;
   const offset = c - (Math.min(100, pct) / 100) * c;
   return (
     <svg width={size} height={size} className="rotate-[-90deg]">
-      <circle cx={size / 2} cy={size / 2} r={r} stroke="oklch(1 0 0 / 0.08)" strokeWidth={3} fill="none" />
+      <circle
+        cx={size / 2}
+        cy={size / 2}
+        r={r}
+        stroke="oklch(1 0 0 / 0.08)"
+        strokeWidth={3}
+        fill="none"
+      />
       <motion.circle
         cx={size / 2}
         cy={size / 2}
@@ -213,8 +228,12 @@ function DashboardHome() {
     let alive = true;
     (async () => {
       const [saved, progress, act, quiz] = await Promise.all([
-        supabase.from("saved_careers" as never).select("career_key", { count: "exact", head: true }),
-        supabase.from("roadmap_progress" as never).select("career_key, step_key", { count: "exact" }),
+        supabase
+          .from("saved_careers" as never)
+          .select("career_key", { count: "exact", head: true }),
+        supabase
+          .from("roadmap_progress" as never)
+          .select("career_key, step_key", { count: "exact" }),
         supabase
           .from("learning_activity" as never)
           .select("id, kind, label, created_at")
@@ -232,8 +251,7 @@ function DashboardHome() {
       setProgressCount(progress.count ?? 0);
       setActivity((act.data as any) ?? []);
       const recs = (quiz.data as any)?.recommendations as
-        | { title: string; match_score: number }[]
-        | undefined;
+        { title: string; match_score: number }[] | undefined;
       if (recs && recs.length) {
         setQuizMatch(recs[0].match_score ?? 0);
         setTopRec(recs[0].title);
@@ -251,8 +269,7 @@ function DashboardHome() {
       const matched = careers.find((c) =>
         c.title.toLowerCase().includes(topRec.toLowerCase().split(" ")[0]),
       );
-      if (matched)
-        return [matched, ...careers.filter((c) => c.key !== matched.key).slice(0, 2)];
+      if (matched) return [matched, ...careers.filter((c) => c.key !== matched.key).slice(0, 2)];
     }
     return careers.slice(0, 3);
   }, [topRec]);
@@ -262,16 +279,45 @@ function DashboardHome() {
   const savedVal = useCounter(savedCount);
 
   const stats = [
-    { icon: Target, label: "Top Career Match", value: `${matchVal}%`, raw: matchVal, glow: "78", suffix: "" },
-    { icon: Award, label: "Saved Roadmaps", value: `${savedVal}`, raw: Math.min(100, savedVal * 20), glow: "252" },
+    {
+      icon: Target,
+      label: "Top Career Match",
+      value: `${matchVal}%`,
+      raw: matchVal,
+      glow: "78",
+      suffix: "",
+    },
+    {
+      icon: Award,
+      label: "Saved Roadmaps",
+      value: `${savedVal}`,
+      raw: Math.min(100, savedVal * 20),
+      glow: "252",
+    },
     { icon: Flame, label: "Day Streak", value: "1", raw: 12, glow: "30" },
-    { icon: BookOpen, label: "Skills Tracked", value: `${skillsVal}`, raw: Math.min(100, skillsVal * 10), glow: "158" },
+    {
+      icon: BookOpen,
+      label: "Skills Tracked",
+      value: `${skillsVal}`,
+      raw: Math.min(100, skillsVal * 10),
+      glow: "158",
+    },
   ];
 
   const tasks = [
     { label: "Take the AI Career Quiz", to: "/dashboard/quiz", icon: Brain, done: !!topRec },
-    { label: "Explore the Career Library", to: "/dashboard/careers", icon: Compass, done: savedCount > 0 },
-    { label: "Start your first roadmap", to: "/dashboard/careers", icon: Map, done: progressCount > 0 },
+    {
+      label: "Explore the Career Library",
+      to: "/dashboard/careers",
+      icon: Compass,
+      done: savedCount > 0,
+    },
+    {
+      label: "Start your first roadmap",
+      to: "/dashboard/careers",
+      icon: Map,
+      done: progressCount > 0,
+    },
   ];
 
   const completedTasks = tasks.filter((t) => t.done).length;
@@ -280,10 +326,14 @@ function DashboardHome() {
   return (
     <div className="max-w-7xl mx-auto space-y-6 md:space-y-8 relative">
       {/* Ambient orbs */}
-      <div className="pointer-events-none absolute -top-20 -left-20 h-72 w-72 rounded-full blur-3xl orb"
-           style={{ background: "oklch(0.84 0.13 78 / 0.18)" }} />
-      <div className="pointer-events-none absolute top-40 right-0 h-80 w-80 rounded-full blur-3xl orb"
-           style={{ background: "oklch(0.66 0.16 252 / 0.12)", animationDelay: "-7s" }} />
+      <div
+        className="pointer-events-none absolute -top-20 -left-20 h-72 w-72 rounded-full blur-3xl orb"
+        style={{ background: "oklch(0.84 0.13 78 / 0.18)" }}
+      />
+      <div
+        className="pointer-events-none absolute top-40 right-0 h-80 w-80 rounded-full blur-3xl orb"
+        style={{ background: "oklch(0.66 0.16 252 / 0.12)", animationDelay: "-7s" }}
+      />
 
       {/* ── Hero header ── */}
       <motion.div
@@ -292,7 +342,13 @@ function DashboardHome() {
         className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 pt-2"
       >
         <div>
-          <div className="eyebrow mb-3">{new Date().toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" })}</div>
+          <div className="eyebrow mb-3">
+            {new Date().toLocaleDateString(undefined, {
+              weekday: "long",
+              month: "long",
+              day: "numeric",
+            })}
+          </div>
           <h1 className="font-display text-3xl md:text-5xl font-bold tracking-tight">
             Welcome back, <span className="serif italic font-normal gradient-text">{name}</span>
           </h1>
@@ -337,7 +393,9 @@ function DashboardHome() {
                 <RadialRing pct={s.raw} glow={s.glow} />
               </div>
               <div className="text-3xl font-display font-bold mt-4 tracking-tight">{s.value}</div>
-              <div className="text-[11px] uppercase tracking-wider text-muted-foreground mt-1">{s.label}</div>
+              <div className="text-[11px] uppercase tracking-wider text-muted-foreground mt-1">
+                {s.label}
+              </div>
               <div
                 className="absolute -bottom-12 -right-12 h-28 w-28 rounded-full blur-3xl opacity-40 pointer-events-none"
                 style={{ background: `oklch(0.72 0.21 ${s.glow})` }}
@@ -526,7 +584,9 @@ function DashboardHome() {
               </h2>
               <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
                 <RadialRing pct={taskPct} size={32} />
-                <span>{completedTasks}/{tasks.length}</span>
+                <span>
+                  {completedTasks}/{tasks.length}
+                </span>
               </div>
             </div>
             <ul className="space-y-2">
@@ -543,13 +603,17 @@ function DashboardHome() {
                   >
                     <div
                       className={`h-5 w-5 rounded-full flex items-center justify-center shrink-0 transition ${
-                        t.done ? "aurora-bg" : "border border-white/15 group-hover/t:border-primary/60"
+                        t.done
+                          ? "aurora-bg"
+                          : "border border-white/15 group-hover/t:border-primary/60"
                       }`}
                     >
                       {t.done && <CheckCircle2 className="h-3 w-3 text-background" />}
                     </div>
                     <t.icon className="h-3.5 w-3.5 text-muted-foreground" />
-                    <span className={`flex-1 ${t.done ? "line-through text-muted-foreground" : ""}`}>
+                    <span
+                      className={`flex-1 ${t.done ? "line-through text-muted-foreground" : ""}`}
+                    >
                       {t.label}
                     </span>
                     <ArrowRight className="h-3 w-3 opacity-0 group-hover/t:opacity-100 transition" />

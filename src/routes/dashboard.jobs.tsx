@@ -37,14 +37,31 @@ const salaryBands = [
 ];
 
 const TECH_CHIPS = [
-  "React", "TypeScript", "Node", "Python", "Java", "AWS",
-  "Kubernetes", "Docker", "SQL", "Go", "Rust", "Next.js",
-  "TailwindCSS", "GraphQL", "Django", "Flask",
+  "React",
+  "TypeScript",
+  "Node",
+  "Python",
+  "Java",
+  "AWS",
+  "Kubernetes",
+  "Docker",
+  "SQL",
+  "Go",
+  "Rust",
+  "Next.js",
+  "TailwindCSS",
+  "GraphQL",
+  "Django",
+  "Flask",
 ];
 
 const TRENDING_QUERIES = [
-  "software engineer", "frontend developer", "backend developer",
-  "full stack developer", "data scientist", "ai engineer",
+  "software engineer",
+  "frontend developer",
+  "backend developer",
+  "full stack developer",
+  "data scientist",
+  "ai engineer",
 ];
 
 type LiveJob = {
@@ -72,14 +89,29 @@ function inferType(j: LiveJob): "Full-time" | "Internship" | "Contract" | "Part-
   const s = `${j.title} ${j.contractTime} ${j.contractType}`.toLowerCase();
   if (s.includes("intern")) return "Internship";
   if (j.contractType === "contract" || s.includes("contract")) return "Contract";
-  if (j.contractTime === "part_time" || s.includes("part-time") || s.includes("part time")) return "Part-time";
+  if (j.contractTime === "part_time" || s.includes("part-time") || s.includes("part time"))
+    return "Part-time";
   return "Full-time";
 }
 function inferExp(j: LiveJob): "Internship" | "Entry" | "Mid" | "Senior" {
   const s = j.title.toLowerCase();
   if (s.includes("intern")) return "Internship";
-  if (s.includes("senior") || s.includes("sr.") || s.includes("lead") || s.includes("principal") || s.includes("staff")) return "Senior";
-  if (s.includes("junior") || s.includes("jr.") || s.includes("entry") || s.includes("graduate") || s.includes("associate")) return "Entry";
+  if (
+    s.includes("senior") ||
+    s.includes("sr.") ||
+    s.includes("lead") ||
+    s.includes("principal") ||
+    s.includes("staff")
+  )
+    return "Senior";
+  if (
+    s.includes("junior") ||
+    s.includes("jr.") ||
+    s.includes("entry") ||
+    s.includes("graduate") ||
+    s.includes("associate")
+  )
+    return "Entry";
   return "Mid";
 }
 function relTime(iso: string) {
@@ -94,8 +126,9 @@ function relTime(iso: string) {
   return `${Math.floor(days / 30)}mo ago`;
 }
 function fmtSalary(j: LiveJob) {
-  const a = j.salaryMin, b = j.salaryMax;
-  const fmt = (n: number) => n >= 1000 ? `${Math.round(n / 1000)}k` : `${n}`;
+  const a = j.salaryMin,
+    b = j.salaryMax;
+  const fmt = (n: number) => (n >= 1000 ? `${Math.round(n / 1000)}k` : `${n}`);
   if (a && b) return `$${fmt(a)} – $${fmt(b)}`;
   if (a) return `From $${fmt(a)}`;
   if (b) return `Up to $${fmt(b)}`;
@@ -147,24 +180,33 @@ function JobsPage() {
       setSavedIds(new Set(rows.map((r) => r.job_id)));
       setSavedJobs(rows.map((r) => r.payload).filter(Boolean));
     })();
-    return () => { alive = false; };
+    return () => {
+      alive = false;
+    };
   }, [user]);
 
   // Build API query — only the keyword goes to Adzuna; tech chips filter locally.
   const fetchJobs = useCallback(
-    async (overrides?: { what?: string; where?: string; type?: (typeof typeOpts)[number]; salary?: number }) => {
+    async (overrides?: {
+      what?: string;
+      where?: string;
+      type?: (typeof typeOpts)[number];
+      salary?: number;
+    }) => {
       const reqId = ++reqIdRef.current;
       setLoading(true);
       setErrMsg(null);
       setAppliedFallback(null);
 
       const userQuery = (overrides?.what ?? q).trim();
-      let baseQuery = userQuery ||
-        TRENDING_QUERIES[Math.floor(Math.random() * TRENDING_QUERIES.length)];
+      let baseQuery =
+        userQuery || TRENDING_QUERIES[Math.floor(Math.random() * TRENDING_QUERIES.length)];
       // If the Internships tab is active, bias the API search toward internships.
       if (tab === "internships") {
         baseQuery = userQuery
-          ? (/intern/i.test(userQuery) ? userQuery : `${userQuery} intern`)
+          ? /intern/i.test(userQuery)
+            ? userQuery
+            : `${userQuery} intern`
           : "intern";
       }
       const baseWhere = overrides?.where ?? loc;
@@ -184,12 +226,23 @@ function JobsPage() {
       }
 
       const filters = {
-        keyword: baseQuery, location: baseWhere, type: baseType,
-        remote, experience: exp, salary: baseSalary, techChips: [...techChips],
+        keyword: baseQuery,
+        location: baseWhere,
+        type: baseType,
+        remote,
+        experience: exp,
+        salary: baseSalary,
+        techChips: [...techChips],
       };
       console.log("[jobs] Filters:", filters);
 
-      const buildParams = (opts: { keyword: string; where: string; type: (typeof typeOpts)[number]; salary: number; remote: boolean }) => {
+      const buildParams = (opts: {
+        keyword: string;
+        where: string;
+        type: (typeof typeOpts)[number];
+        salary: number;
+        remote: boolean;
+      }) => {
         const p = new URLSearchParams();
         p.set("what", opts.keyword);
         if (opts.where && opts.where !== "All") p.set("where", opts.where);
@@ -206,7 +259,13 @@ function JobsPage() {
       try {
         // Attempt 1 — full filters
         let jobs = await run(
-          buildParams({ keyword: baseQuery, where: baseWhere, type: baseType, salary: baseSalary, remote: remote === "Remote" }),
+          buildParams({
+            keyword: baseQuery,
+            where: baseWhere,
+            type: baseType,
+            salary: baseSalary,
+            remote: remote === "Remote",
+          }),
           "primary",
         );
 
@@ -214,7 +273,13 @@ function JobsPage() {
         if (jobs.length === 0) {
           setAppliedFallback("Removed type, salary, and remote filters");
           jobs = await run(
-            buildParams({ keyword: baseQuery, where: baseWhere, type: "All", salary: 0, remote: false }),
+            buildParams({
+              keyword: baseQuery,
+              where: baseWhere,
+              type: "All",
+              salary: 0,
+              remote: false,
+            }),
             "fallback-no-extras",
           );
         }
@@ -223,7 +288,13 @@ function JobsPage() {
         if (jobs.length === 0) {
           setAppliedFallback("Removed location filter");
           jobs = await run(
-            buildParams({ keyword: baseQuery, where: "All", type: "All", salary: 0, remote: false }),
+            buildParams({
+              keyword: baseQuery,
+              where: "All",
+              type: "All",
+              salary: 0,
+              remote: false,
+            }),
             "fallback-no-location",
           );
         }
@@ -270,7 +341,9 @@ function JobsPage() {
   // Debounce on filter changes
   useEffect(() => {
     if (tab === "saved") return;
-    const h = setTimeout(() => { fetchJobs(); }, 350);
+    const h = setTimeout(() => {
+      fetchJobs();
+    }, 350);
     return () => clearTimeout(h);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [q, loc, remote, type, salary, tab]);
@@ -292,14 +365,21 @@ function JobsPage() {
   }, [sourceList, tab, remote, exp, techChips]);
 
   const toggleSave = async (j: LiveJob) => {
-    if (!user) { toast.error("Sign in to save jobs"); return; }
+    if (!user) {
+      toast.error("Sign in to save jobs");
+      return;
+    }
     const isSaved = savedIds.has(j.id);
     const next = new Set(savedIds);
     if (isSaved) {
       next.delete(j.id);
       setSavedIds(next);
       setSavedJobs((prev) => prev.filter((s) => s.id !== j.id));
-      await supabase.from("saved_jobs" as never).delete().eq("job_id", j.id).eq("user_id", user.id);
+      await supabase
+        .from("saved_jobs" as never)
+        .delete()
+        .eq("job_id", j.id)
+        .eq("user_id", user.id);
       toast("Removed from saved jobs");
     } else {
       next.add(j.id);
@@ -320,14 +400,20 @@ function JobsPage() {
   const toggleTechChip = (s: string) => {
     setTechChips((prev) => {
       const next = new Set(prev);
-      if (next.has(s)) next.delete(s); else next.add(s);
+      if (next.has(s)) next.delete(s);
+      else next.add(s);
       return next;
     });
   };
 
   const clearAll = () => {
-    setQ(""); setLoc("All"); setRemote("All"); setType("All");
-    setExp("All"); setSalary(salaryBands[0]); setTechChips(new Set());
+    setQ("");
+    setLoc("All");
+    setRemote("All");
+    setType("All");
+    setExp("All");
+    setSalary(salaryBands[0]);
+    setTechChips(new Set());
   };
 
   return (
@@ -346,13 +432,20 @@ function JobsPage() {
       </motion.div>
 
       {/* Popular Locations */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
         <div className="flex items-center justify-between mb-3">
           <h2 className="font-display text-base md:text-lg font-bold flex items-center gap-2">
             <MapPin className="h-4 w-4 text-primary" /> Popular Locations
           </h2>
           {loc !== "All" && (
-            <button onClick={() => setLoc("All")} className="text-xs glass rounded-full px-3 py-1 hover:bg-white/10 transition">
+            <button
+              onClick={() => setLoc("All")}
+              className="text-xs glass rounded-full px-3 py-1 hover:bg-white/10 transition"
+            >
               Clear
             </button>
           )}
@@ -370,11 +463,16 @@ function JobsPage() {
                 onClick={() => setLoc(active ? "All" : l.name)}
                 className={`relative shrink-0 snap-start glass-strong rounded-2xl p-4 w-32 sm:w-40 text-left overflow-hidden group ${active ? "ring-2 ring-primary" : ""}`}
               >
-                <div className="absolute -top-10 -right-10 h-24 w-24 rounded-full blur-3xl opacity-30 group-hover:opacity-60 transition" style={{ background: `oklch(0.72 0.21 ${l.hue})` }} />
+                <div
+                  className="absolute -top-10 -right-10 h-24 w-24 rounded-full blur-3xl opacity-30 group-hover:opacity-60 transition"
+                  style={{ background: `oklch(0.72 0.21 ${l.hue})` }}
+                />
                 <div className="relative">
                   <div className="text-2xl">{l.emoji}</div>
                   <div className="font-semibold mt-2 text-sm">{l.name}</div>
-                  <div className="text-[10px] text-muted-foreground mt-0.5">{l.count.toLocaleString()} jobs</div>
+                  <div className="text-[10px] text-muted-foreground mt-0.5">
+                    {l.count.toLocaleString()} jobs
+                  </div>
                 </div>
               </motion.button>
             );
@@ -384,20 +482,28 @@ function JobsPage() {
 
       {/* Tabs */}
       <div className="flex gap-2 glass rounded-full p-1 w-fit max-w-full overflow-x-auto">
-        {([
-          { k: "all", label: "All Jobs", icon: Briefcase },
-          { k: "internships", label: "Internships", icon: GraduationCap },
-          { k: "saved", label: `Saved (${savedIds.size})`, icon: Bookmark },
-        ] as const).map((t) => (
+        {(
+          [
+            { k: "all", label: "All Jobs", icon: Briefcase },
+            { k: "internships", label: "Internships", icon: GraduationCap },
+            { k: "saved", label: `Saved (${savedIds.size})`, icon: Bookmark },
+          ] as const
+        ).map((t) => (
           <button
             key={t.k}
             onClick={() => setTab(t.k)}
             className={`relative text-xs px-3 sm:px-4 py-2 rounded-full flex items-center gap-1.5 transition whitespace-nowrap ${
-              tab === t.k ? "text-background font-medium" : "text-muted-foreground hover:text-foreground"
+              tab === t.k
+                ? "text-background font-medium"
+                : "text-muted-foreground hover:text-foreground"
             }`}
           >
             {tab === t.k && (
-              <motion.div layoutId="jobs-tab" className="absolute inset-0 aurora-bg rounded-full glow-shadow" transition={{ type: "spring", stiffness: 400, damping: 30 }} />
+              <motion.div
+                layoutId="jobs-tab"
+                className="absolute inset-0 aurora-bg rounded-full glow-shadow"
+                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              />
             )}
             <span className="relative flex items-center gap-1.5">
               <t.icon className="h-3 w-3" /> {t.label}
@@ -407,7 +513,11 @@ function JobsPage() {
       </div>
 
       {/* Search + Filters */}
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass-strong rounded-3xl p-4 md:p-5 space-y-4">
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="glass-strong rounded-3xl p-4 md:p-5 space-y-4"
+      >
         <div className="relative">
           <Search className="h-4 w-4 absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input
@@ -420,22 +530,40 @@ function JobsPage() {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
           <FilterGroup label="Work Mode" icon={Zap}>
-            {remoteOpts.map((o) => <Chip key={o} active={remote === o} onClick={() => setRemote(o)}>{o}</Chip>)}
+            {remoteOpts.map((o) => (
+              <Chip key={o} active={remote === o} onClick={() => setRemote(o)}>
+                {o}
+              </Chip>
+            ))}
           </FilterGroup>
           <FilterGroup label="Type" icon={Briefcase}>
-            {typeOpts.map((o) => <Chip key={o} active={type === o} onClick={() => setType(o)}>{o}</Chip>)}
+            {typeOpts.map((o) => (
+              <Chip key={o} active={type === o} onClick={() => setType(o)}>
+                {o}
+              </Chip>
+            ))}
           </FilterGroup>
           <FilterGroup label="Experience" icon={TrendingUp}>
-            {expOpts.map((o) => <Chip key={o} active={exp === o} onClick={() => setExp(o)}>{o}</Chip>)}
+            {expOpts.map((o) => (
+              <Chip key={o} active={exp === o} onClick={() => setExp(o)}>
+                {o}
+              </Chip>
+            ))}
           </FilterGroup>
           <FilterGroup label="Salary (optional)" icon={DollarSign}>
-            {salaryBands.map((b) => <Chip key={b.label} active={salary.label === b.label} onClick={() => setSalary(b)}>{b.label}</Chip>)}
+            {salaryBands.map((b) => (
+              <Chip key={b.label} active={salary.label === b.label} onClick={() => setSalary(b)}>
+                {b.label}
+              </Chip>
+            ))}
           </FilterGroup>
           <div className="lg:col-span-2">
             <FilterGroup label="Tech Stack (local filter)" icon={FilterIcon}>
               <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto">
                 {TECH_CHIPS.map((s) => (
-                  <Chip key={s} active={techChips.has(s)} onClick={() => toggleTechChip(s)}>{s}</Chip>
+                  <Chip key={s} active={techChips.has(s)} onClick={() => toggleTechChip(s)}>
+                    {s}
+                  </Chip>
                 ))}
               </div>
             </FilterGroup>
@@ -443,7 +571,10 @@ function JobsPage() {
         </div>
 
         <div className="flex items-center justify-between flex-wrap gap-2 text-xs">
-          <button onClick={clearAll} className="glass rounded-full px-3 py-1.5 hover:bg-white/10 transition">
+          <button
+            onClick={clearAll}
+            className="glass rounded-full px-3 py-1.5 hover:bg-white/10 transition"
+          >
             Clear all filters
           </button>
           {appliedFallback && (
@@ -455,9 +586,14 @@ function JobsPage() {
       {/* Results meta */}
       <div className="text-xs text-muted-foreground flex items-center gap-2">
         {loading ? (
-          <><Loader2 className="h-3 w-3 animate-spin" /> Searching live jobs…</>
+          <>
+            <Loader2 className="h-3 w-3 animate-spin" /> Searching live jobs…
+          </>
         ) : (
-          <>Showing <span className="text-foreground font-medium">{filtered.length}</span> {tab === "internships" ? "internships" : tab === "saved" ? "saved jobs" : "jobs"}</>
+          <>
+            Showing <span className="text-foreground font-medium">{filtered.length}</span>{" "}
+            {tab === "internships" ? "internships" : tab === "saved" ? "saved jobs" : "jobs"}
+          </>
         )}
       </div>
 
@@ -480,7 +616,10 @@ function JobsPage() {
         <div className="text-center py-16 md:py-20 text-muted-foreground glass-strong rounded-3xl px-4">
           <div className="text-sm mb-2">{errMsg ?? "No jobs match your filters."}</div>
           <div className="text-xs">Try removing some filters or using a broader search term.</div>
-          <button onClick={clearAll} className="mt-4 inline-flex items-center gap-2 text-xs glass rounded-full px-4 py-2 hover:bg-white/10 transition">
+          <button
+            onClick={clearAll}
+            className="mt-4 inline-flex items-center gap-2 text-xs glass rounded-full px-4 py-2 hover:bg-white/10 transition"
+          >
             Reset filters
           </button>
         </div>
@@ -496,8 +635,18 @@ function JobsPage() {
   );
 }
 
-function JobCard({ job, saved, onToggleSave, onOpen, delay }: {
-  job: LiveJob; saved: boolean; onToggleSave: () => void; onOpen: () => void; delay: number;
+function JobCard({
+  job,
+  saved,
+  onToggleSave,
+  onOpen,
+  delay,
+}: {
+  job: LiveJob;
+  saved: boolean;
+  onToggleSave: () => void;
+  onOpen: () => void;
+  delay: number;
 }) {
   const remote = inferRemote(job);
   const type = inferType(job);
@@ -523,42 +672,68 @@ function JobCard({ job, saved, onToggleSave, onOpen, delay }: {
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
-                  <h3 className="font-display font-bold text-base md:text-lg line-clamp-2">{job.title}</h3>
+                  <h3 className="font-display font-bold text-base md:text-lg line-clamp-2">
+                    {job.title}
+                  </h3>
                   <div className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
-                    <Building2 className="h-3 w-3" /> <span className="truncate">{job.company}</span>
+                    <Building2 className="h-3 w-3" />{" "}
+                    <span className="truncate">{job.company}</span>
                   </div>
                 </div>
-                <button onClick={onToggleSave} className="glass rounded-lg p-1.5 hover:bg-white/10 transition shrink-0" aria-label={saved ? "Unsave" : "Save"}>
-                  {saved ? <BookmarkCheck className="h-4 w-4 text-primary" /> : <Bookmark className="h-4 w-4" />}
+                <button
+                  onClick={onToggleSave}
+                  className="glass rounded-lg p-1.5 hover:bg-white/10 transition shrink-0"
+                  aria-label={saved ? "Unsave" : "Save"}
+                >
+                  {saved ? (
+                    <BookmarkCheck className="h-4 w-4 text-primary" />
+                  ) : (
+                    <Bookmark className="h-4 w-4" />
+                  )}
                 </button>
               </div>
             </div>
           </div>
 
           <div className="flex flex-wrap gap-1.5 mt-3">
-            <span className="text-[10px] glass rounded-full px-2 py-0.5 flex items-center gap-1" style={{ color: `oklch(0.78 0.2 ${remoteHue})` }}>
+            <span
+              className="text-[10px] glass rounded-full px-2 py-0.5 flex items-center gap-1"
+              style={{ color: `oklch(0.78 0.2 ${remoteHue})` }}
+            >
               <Zap className="h-2.5 w-2.5" /> {remote}
             </span>
             <span className="text-[10px] glass rounded-full px-2 py-0.5 flex items-center gap-1">
-              <MapPin className="h-2.5 w-2.5" /> <span className="truncate max-w-[140px]">{job.location || "—"}</span>
+              <MapPin className="h-2.5 w-2.5" />{" "}
+              <span className="truncate max-w-[140px]">{job.location || "—"}</span>
             </span>
             <span className="text-[10px] glass rounded-full px-2 py-0.5">{type}</span>
             <span className="text-[10px] glass rounded-full px-2 py-0.5">{exp}</span>
           </div>
 
           <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
-            <div className="flex items-center gap-1.5 text-muted-foreground"><DollarSign className="h-3 w-3" /> {fmtSalary(job)}</div>
-            <div className="flex items-center gap-1.5 text-muted-foreground"><Clock className="h-3 w-3" /> {relTime(job.created)}</div>
+            <div className="flex items-center gap-1.5 text-muted-foreground">
+              <DollarSign className="h-3 w-3" /> {fmtSalary(job)}
+            </div>
+            <div className="flex items-center gap-1.5 text-muted-foreground">
+              <Clock className="h-3 w-3" /> {relTime(job.created)}
+            </div>
           </div>
 
           <p className="mt-3 text-xs text-muted-foreground line-clamp-3">{job.description}</p>
 
           <div className="mt-auto pt-4 flex gap-2">
-            <button onClick={onOpen} className="flex-1 glass rounded-xl py-2 text-xs hover:bg-white/10 transition">
+            <button
+              onClick={onOpen}
+              className="flex-1 glass rounded-xl py-2 text-xs hover:bg-white/10 transition"
+            >
               View Details
             </button>
-            <a href={job.applyUrl} target="_blank" rel="noopener noreferrer"
-              className="flex-1 aurora-bg text-background font-medium rounded-xl py-2 text-xs glow-shadow hover:scale-[1.02] transition flex items-center justify-center gap-1">
+            <a
+              href={job.applyUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 aurora-bg text-background font-medium rounded-xl py-2 text-xs glow-shadow hover:scale-[1.02] transition flex items-center justify-center gap-1"
+            >
               Apply <ExternalLink className="h-3 w-3" />
             </a>
           </div>
@@ -568,15 +743,28 @@ function JobCard({ job, saved, onToggleSave, onOpen, delay }: {
   );
 }
 
-function JobModal({ job, onClose, saved, onToggleSave }: {
-  job: LiveJob | null; onClose: () => void; saved: boolean; onToggleSave: () => void;
+function JobModal({
+  job,
+  onClose,
+  saved,
+  onToggleSave,
+}: {
+  job: LiveJob | null;
+  onClose: () => void;
+  saved: boolean;
+  onToggleSave: () => void;
 }) {
   return (
     <AnimatePresence>
       {job && (
         <>
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}
-            className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm" />
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm"
+          />
           <motion.div
             initial={{ opacity: 0, y: 30, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -597,17 +785,27 @@ function JobModal({ job, onClose, saved, onToggleSave }: {
                   <MapPin className="h-3 w-3" /> {job.location || "—"}
                 </div>
               </div>
-              <button onClick={onClose} className="glass rounded-lg p-1.5 hover:bg-white/10 transition shrink-0" aria-label="Close">
+              <button
+                onClick={onClose}
+                className="glass rounded-lg p-1.5 hover:bg-white/10 transition shrink-0"
+                aria-label="Close"
+              >
                 <X className="h-4 w-4" />
               </button>
             </div>
 
             <div className="relative flex-1 overflow-y-auto p-4 md:p-6 space-y-5">
               <div className="flex flex-wrap gap-1.5">
-                <span className="text-[10px] glass rounded-full px-2 py-0.5">{inferRemote(job)}</span>
+                <span className="text-[10px] glass rounded-full px-2 py-0.5">
+                  {inferRemote(job)}
+                </span>
                 <span className="text-[10px] glass rounded-full px-2 py-0.5">{inferType(job)}</span>
                 <span className="text-[10px] glass rounded-full px-2 py-0.5">{inferExp(job)}</span>
-                {job.category && <span className="text-[10px] glass rounded-full px-2 py-0.5 text-primary">{job.category}</span>}
+                {job.category && (
+                  <span className="text-[10px] glass rounded-full px-2 py-0.5 text-primary">
+                    {job.category}
+                  </span>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-3 text-xs">
@@ -617,16 +815,33 @@ function JobModal({ job, onClose, saved, onToggleSave }: {
 
               <div>
                 <h3 className="font-display font-bold text-sm mb-2">About the role</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{job.description}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+                  {job.description}
+                </p>
               </div>
             </div>
 
             <div className="relative p-4 border-t border-white/10 flex gap-2">
-              <button onClick={onToggleSave} className="glass rounded-xl px-4 py-2.5 text-xs hover:bg-white/10 transition flex items-center gap-1.5">
-                {saved ? <><BookmarkCheck className="h-4 w-4 text-primary" /> Saved</> : <><Bookmark className="h-4 w-4" /> Save</>}
+              <button
+                onClick={onToggleSave}
+                className="glass rounded-xl px-4 py-2.5 text-xs hover:bg-white/10 transition flex items-center gap-1.5"
+              >
+                {saved ? (
+                  <>
+                    <BookmarkCheck className="h-4 w-4 text-primary" /> Saved
+                  </>
+                ) : (
+                  <>
+                    <Bookmark className="h-4 w-4" /> Save
+                  </>
+                )}
               </button>
-              <a href={job.applyUrl} target="_blank" rel="noopener noreferrer"
-                className="flex-1 aurora-bg text-background font-medium rounded-xl py-2.5 text-sm glow-shadow hover:scale-[1.01] transition flex items-center justify-center gap-2">
+              <a
+                href={job.applyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 aurora-bg text-background font-medium rounded-xl py-2.5 text-sm glow-shadow hover:scale-[1.01] transition flex items-center justify-center gap-2"
+              >
                 Apply Now <ExternalLink className="h-4 w-4" />
               </a>
             </div>
@@ -637,7 +852,15 @@ function JobModal({ job, onClose, saved, onToggleSave }: {
   );
 }
 
-function FilterGroup({ label, icon: Icon, children }: { label: string; icon: React.ComponentType<{ className?: string }>; children: React.ReactNode }) {
+function FilterGroup({
+  label,
+  icon: Icon,
+  children,
+}: {
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  children: React.ReactNode;
+}) {
   return (
     <div>
       <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-muted-foreground mb-2">
@@ -648,7 +871,15 @@ function FilterGroup({ label, icon: Icon, children }: { label: string; icon: Rea
   );
 }
 
-function Chip({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+function Chip({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
   return (
     <button
       onClick={onClick}
@@ -659,7 +890,15 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
   );
 }
 
-function Stat({ icon: Icon, label, value }: { icon: React.ComponentType<{ className?: string }>; label: string; value: string }) {
+function Stat({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  value: string;
+}) {
   return (
     <div className="glass rounded-xl p-3">
       <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-muted-foreground">

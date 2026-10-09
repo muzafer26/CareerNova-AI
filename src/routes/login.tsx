@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Sparkles, Loader2 } from "lucide-react";
 import { AuroraBackground } from "@/components/Aurora";
 import { supabase } from "@/integrations/supabase/client";
+import { signInAsGuest } from "@/lib/auth";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/login")({ component: Login });
@@ -13,6 +14,12 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const handleGuest = () => {
+    signInAsGuest();
+    toast.success("Welcome, Guest Explorer!");
+    navigate({ to: "/dashboard" });
+  };
 
   const handleEmail = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,9 +42,7 @@ function Login() {
           <div className="aurora-bg rounded-lg p-1.5">
             <Sparkles className="h-4 w-4 text-background" />
           </div>
-          <span className="font-display font-bold">
-            CareerNova
-          </span>
+          <span className="font-display font-bold">CareerNova</span>
         </Link>
         <h1 className="font-display text-3xl font-bold">Welcome back</h1>
         <p className="text-sm text-muted-foreground mt-1">Sign in to continue your journey</p>
@@ -66,6 +71,22 @@ function Login() {
           >
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
             {loading ? "Signing in..." : "Sign in"}
+          </button>
+
+          <div className="relative my-4 flex items-center justify-center">
+            <span className="h-px w-full bg-white/10" />
+            <span className="absolute px-2 text-[11px] text-muted-foreground uppercase tracking-wider bg-background">
+              or
+            </span>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleGuest}
+            className="w-full glass py-2.5 rounded-xl text-sm font-medium hover:bg-white/10 transition flex items-center justify-center gap-2"
+          >
+            <Sparkles className="h-3.5 w-3.5 text-primary" />
+            Continue as Guest (Demo Mode)
           </button>
         </form>
 

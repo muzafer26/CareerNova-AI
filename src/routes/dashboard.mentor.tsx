@@ -2,15 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import {
-  Sparkles,
-  Send,
-  Bot,
-  User as UserIcon,
-  Loader2,
-  Trash2,
-  Lightbulb,
-} from "lucide-react";
+import { Sparkles, Send, Bot, User as UserIcon, Loader2, Trash2, Lightbulb } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -67,15 +59,25 @@ function MentorPage() {
           .order("created_at", { ascending: false })
           .limit(1)
           .maybeSingle(),
-        supabase.from("saved_careers" as never).select("title").limit(8),
+        supabase
+          .from("saved_careers" as never)
+          .select("title")
+          .limit(8),
       ]);
       if (!alive) return;
       const rows = (hist.data ?? []) as Msg[];
       setMessages(rows.filter((r) => r.role === "user" || r.role === "assistant"));
-      const recs = (quiz.data as { recommendations?: { title?: string }[] } | null)?.recommendations;
+      const recs = (quiz.data as { recommendations?: { title?: string }[] } | null)
+        ?.recommendations;
       const savedTitles = ((saved.data ?? []) as { title: string }[]).map((s) => s.title);
       const ctx: string[] = [];
-      if (recs?.length) ctx.push(`Quiz top matches: ${recs.slice(0, 3).map((r) => r.title).join(", ")}`);
+      if (recs?.length)
+        ctx.push(
+          `Quiz top matches: ${recs
+            .slice(0, 3)
+            .map((r) => r.title)
+            .join(", ")}`,
+        );
       if (savedTitles.length) ctx.push(`Saved careers: ${savedTitles.join(", ")}`);
       setContextStr(ctx.join("\n"));
     })();
@@ -162,7 +164,9 @@ function MentorPage() {
       if (acc) persist("assistant", acc);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Something went wrong");
-      setMessages((m) => m.filter((x, i) => !(i === m.length - 1 && x.role === "assistant" && !x.content)));
+      setMessages((m) =>
+        m.filter((x, i) => !(i === m.length - 1 && x.role === "assistant" && !x.content)),
+      );
     } finally {
       setStreaming(false);
       setThinking(false);
@@ -172,7 +176,10 @@ function MentorPage() {
   async function clearAll() {
     if (!user) return;
     if (!confirm("Clear all chat history?")) return;
-    await supabase.from("chat_messages" as never).delete().eq("user_id", user.id);
+    await supabase
+      .from("chat_messages" as never)
+      .delete()
+      .eq("user_id", user.id);
     setMessages([]);
     toast.success("History cleared");
   }
@@ -236,7 +243,9 @@ function MentorPage() {
                   onClick={() => send(p)}
                   className="glass rounded-xl px-4 py-3 text-sm text-left hover:bg-white/10 transition group"
                 >
-                  <span className="text-muted-foreground group-hover:text-foreground transition">{p}</span>
+                  <span className="text-muted-foreground group-hover:text-foreground transition">
+                    {p}
+                  </span>
                 </button>
               ))}
             </div>
@@ -265,9 +274,7 @@ function MentorPage() {
               </div>
               <div
                 className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
-                  m.role === "user"
-                    ? "aurora-bg text-background"
-                    : "glass border border-white/10"
+                  m.role === "user" ? "aurora-bg text-background" : "glass border border-white/10"
                 }`}
               >
                 {m.role === "assistant" ? (
@@ -292,11 +299,7 @@ function MentorPage() {
         </AnimatePresence>
 
         {thinking && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex gap-3"
-          >
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-3">
             <div className="shrink-0 h-9 w-9 rounded-2xl flex items-center justify-center aurora-bg glow-shadow">
               <Sparkles className="h-4 w-4 text-background" />
             </div>

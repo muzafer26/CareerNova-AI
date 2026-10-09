@@ -1,111 +1,109 @@
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { useEffect } from "react";
+import { motion } from "framer-motion";
 
 /**
- * Cinematic ambient lighting. Layered radial gradients, subtle parallax,
- * faint grid scaffolding, and a global film grain overlay for depth.
+ * Bauhaus Background:
+ * Authentic constructivist canvas with dot grid texture and decorative
+ * primary color geometric shapes (Red circle, Blue square, Yellow triangle)
+ * with thick black borders and sharp shadows.
  */
 export function AuroraBackground() {
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const x = useSpring(mouseX, { stiffness: 30, damping: 22 });
-  const y = useSpring(mouseY, { stiffness: 30, damping: 22 });
-  const tx1 = useTransform(x, (v) => `${v * 28}px`);
-  const ty1 = useTransform(y, (v) => `${v * 28}px`);
-  const tx2 = useTransform(x, (v) => `${v * -22}px`);
-  const ty2 = useTransform(y, (v) => `${v * -22}px`);
-  const tx3 = useTransform(x, (v) => `${v * 14}px`);
-  const ty3 = useTransform(y, (v) => `${v * 14}px`);
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      mouseX.set((e.clientX / window.innerWidth) - 0.5);
-      mouseY.set((e.clientY / window.innerHeight) - 0.5);
-    };
-    window.addEventListener("mousemove", handler);
-    return () => window.removeEventListener("mousemove", handler);
-  }, [mouseX, mouseY]);
-
   return (
-    <>
-      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-background">
-        {/* Soft scaffolding grid */}
-        <div className="absolute inset-0 grid-bg opacity-50" />
+    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-[#F0F0F0]">
+      {/* Bauhaus dot grid */}
+      <div className="absolute inset-0 bauhaus-grid opacity-25" />
 
-        {/* Primary warm wash — top-left */}
-        <motion.div
-          style={{ x: tx1, y: ty1 }}
-          className="absolute -top-72 -left-44 h-[760px] w-[760px] rounded-full blur-[130px] opacity-[0.22] animate-drift-slow"
-        >
-          <div
-            className="h-full w-full rounded-full"
-            style={{ background: "radial-gradient(circle, oklch(0.84 0.13 78 / 0.95), transparent 60%)" }}
-          />
-        </motion.div>
+      {/* Large Decorative Bauhaus Geometry in Corners / Margins */}
+      {/* Top right: Yellow large circle */}
+      <div
+        className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-[#F0C020] border-4 border-[#121212] opacity-40 shadow-bauhaus-lg"
+        aria-hidden="true"
+      />
 
-        {/* Cobalt — bottom-right */}
-        <motion.div
-          style={{ x: tx2, y: ty2 }}
-          className="absolute top-[55%] -right-64 h-[680px] w-[680px] rounded-full blur-[150px] opacity-[0.16] animate-drift-reverse"
-        >
-          <div
-            className="h-full w-full rounded-full"
-            style={{ background: "radial-gradient(circle, oklch(0.66 0.16 252 / 0.95), transparent 60%)" }}
-          />
-        </motion.div>
+      {/* Bottom left: Blue rotated square */}
+      <div
+        className="absolute -bottom-36 -left-36 w-80 h-80 rounded-none bg-[#1040C0] border-4 border-[#121212] rotate-12 opacity-30 shadow-bauhaus-lg"
+        aria-hidden="true"
+      />
 
-        {/* Mid-canvas violet whisper — adds depth */}
-        <motion.div
-          style={{ x: tx3, y: ty3 }}
-          className="absolute top-[30%] left-[35%] h-[520px] w-[520px] rounded-full blur-[160px] opacity-[0.10] animate-pulse-glow"
-        >
-          <div
-            className="h-full w-full rounded-full"
-            style={{ background: "radial-gradient(circle, oklch(0.62 0.13 305 / 0.9), transparent 65%)" }}
-          />
-        </motion.div>
+      {/* Mid right: Red triangle */}
+      <div
+        className="absolute top-1/2 -right-20 w-64 h-64 bg-[#D02020] border-4 border-[#121212] clip-triangle opacity-25 -rotate-12"
+        aria-hidden="true"
+      />
 
-        {/* Top vignette */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse at top, transparent 30%, oklch(0.10 0.006 260 / 0.85) 95%)",
-          }}
-        />
-      </div>
-
-      {/* Global film grain — sits above background, below content */}
-      <div className="grain-overlay" aria-hidden="true" />
-    </>
+      {/* Constructivist horizontal and vertical division lines */}
+      <div className="absolute top-0 bottom-0 left-12 w-px bg-[#121212] opacity-10 hidden lg:block" />
+      <div className="absolute top-0 bottom-0 right-12 w-px bg-[#121212] opacity-10 hidden lg:block" />
+    </div>
   );
 }
 
-/** Slow, sparse particle drift — restrained. */
-export function FloatingParticles({ count = 14 }: { count?: number }) {
+/**
+ * Bauhaus Geometric Floating Shapes
+ * Sparse, clean geometric shapes (circles, squares, triangles) drifting slowly.
+ */
+export function FloatingParticles({ count = 8 }: { count?: number }) {
+  const shapes = [
+    { type: "circle", color: "#D02020" },
+    { type: "square", color: "#1040C0" },
+    { type: "triangle", color: "#F0C020" },
+    { type: "square-rot", color: "#121212" },
+  ];
+
   return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
       {Array.from({ length: count }).map((_, i) => {
-        const size = Math.random() * 2 + 1;
-        const left = Math.random() * 100;
-        const top = Math.random() * 100;
-        const duration = Math.random() * 10 + 10;
-        const delay = Math.random() * 6;
+        const item = shapes[i % shapes.length];
+        const size = ((i % 3) + 1) * 12 + 10;
+        const left = (i * 14 + 8) % 92;
+        const top = (i * 22 + 15) % 85;
+
         return (
           <motion.div
             key={i}
-            className="absolute rounded-full"
+            className="absolute opacity-60"
             style={{
-              width: size,
-              height: size,
               left: `${left}%`,
               top: `${top}%`,
-              background: "oklch(0.96 0.006 80)",
-              boxShadow: `0 0 ${size * 6}px oklch(0.84 0.13 78 / 0.6)`,
+              width: size,
+              height: size,
             }}
-            animate={{ y: [0, -24, 0], opacity: [0.1, 0.6, 0.1] }}
-            transition={{ duration, repeat: Infinity, delay, ease: "easeInOut" }}
-          />
+            animate={{
+              y: [0, -18, 0],
+              rotate: item.type === "square-rot" ? [45, 60, 45] : [0, 10, 0],
+            }}
+            transition={{
+              duration: 10 + (i % 4) * 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 0.8,
+            }}
+          >
+            {item.type === "circle" && (
+              <div
+                className="w-full h-full rounded-full border-2 border-[#121212] shadow-bauhaus-sm"
+                style={{ backgroundColor: item.color }}
+              />
+            )}
+            {item.type === "square" && (
+              <div
+                className="w-full h-full rounded-none border-2 border-[#121212] shadow-bauhaus-sm"
+                style={{ backgroundColor: item.color }}
+              />
+            )}
+            {item.type === "square-rot" && (
+              <div
+                className="w-full h-full rounded-none border-2 border-[#121212] rotate-45 shadow-bauhaus-sm"
+                style={{ backgroundColor: item.color }}
+              />
+            )}
+            {item.type === "triangle" && (
+              <div
+                className="w-full h-full clip-triangle border-2 border-[#121212]"
+                style={{ backgroundColor: item.color }}
+              />
+            )}
+          </motion.div>
         );
       })}
     </div>

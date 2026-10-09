@@ -1,56 +1,147 @@
-import { Sparkles, Twitter, Github, Linkedin } from "lucide-react";
+import { Twitter, Github, Linkedin, ArrowRight } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 
 export function Footer() {
   return (
-    <footer className="relative pt-20 pb-10 px-6 mt-20">
-      <div className="max-w-6xl mx-auto">
-        <div className="glass-strong rounded-3xl p-10 relative overflow-hidden">
-          <div className="absolute -top-32 left-1/2 -translate-x-1/2 h-64 w-[800px] aurora-bg blur-3xl opacity-20 rounded-full" />
-          <div className="relative grid md:grid-cols-4 gap-10">
-            <div className="md:col-span-2">
-              <div className="flex items-center gap-2">
-                <div className="aurora-bg rounded-lg p-1.5">
-                  <Sparkles className="h-4 w-4 text-background" />
-                </div>
-                <span className="font-display font-bold text-lg">CareerNova</span>
+    <footer className="relative border-t-4 border-[#121212] bg-[#F0F0F0] text-[#121212] py-16 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 border-b-4 border-[#121212] pb-12 mb-10">
+          {/* Col 1: Brand & Bio */}
+          <div className="md:col-span-5">
+            <Link to="/" className="flex items-center gap-2 mb-4 group">
+              <div className="flex items-center gap-1.5" aria-hidden="true">
+                <span className="w-4 h-4 rounded-full bg-[#D02020] border-2 border-[#121212]" />
+                <span className="w-4 h-4 bg-[#1040C0] border-2 border-[#121212]" />
+                <span className="w-4 h-4 clip-triangle bg-[#F0C020] border-2 border-[#121212]" />
               </div>
-              <p className="text-sm text-muted-foreground mt-4 max-w-sm">
-                The AI-native career platform for the next generation of builders, makers and dreamers.
-              </p>
-              <div className="mt-6 flex gap-2">
-                <input
-                  type="email"
-                  placeholder="your@email.com"
-                  className="flex-1 max-w-xs glass rounded-xl px-4 py-2.5 text-sm placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/50"
-                />
-                <button className="aurora-bg text-background text-sm font-medium px-5 py-2.5 rounded-xl hover:opacity-90 transition">
-                  Subscribe
-                </button>
-              </div>
-            </div>
-            <div>
-              <h4 className="font-medium text-sm">Product</h4>
-              <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-                <li><a href="#features" className="hover:text-foreground transition">Features</a></li>
-                <li><a href="#careers" className="hover:text-foreground transition">Careers</a></li>
-                <li><a href="#pricing" className="hover:text-foreground transition">Pricing</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-medium text-sm">Company</h4>
-              <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground transition">About</a></li>
-                <li><a href="#" className="hover:text-foreground transition">Blog</a></li>
-                <li><a href="#" className="hover:text-foreground transition">Contact</a></li>
-              </ul>
+              <span className="font-display font-black text-2xl uppercase tracking-tighter text-[#121212]">
+                CAREERNOVA
+              </span>
+            </Link>
+            <p className="font-medium text-sm text-[#4A4A4A] max-w-sm leading-relaxed mb-6">
+              Constructivist career intelligence for modern engineers. Roadmaps, mock interview
+              drills, ATS resume audits, and dedicated IT sector matrices.
+            </p>
+
+            <div className="flex gap-2">
+              <input
+                type="email"
+                placeholder="developer@domain.com"
+                className="bg-white border-2 border-[#121212] font-mono text-xs px-3 py-2 text-[#121212] placeholder:text-[#4A4A4A] shadow-[2px_2px_0px_0px_#121212] focus:outline-none"
+              />
+              <button className="bg-[#D02020] text-white border-2 border-[#121212] font-mono text-xs font-black uppercase px-4 py-2 shadow-[2px_2px_0px_0px_#121212] btn-press">
+                SUBSCRIBE
+              </button>
             </div>
           </div>
-          <div className="relative mt-10 pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="text-xs text-muted-foreground">© 2026 CareerNova. All rights reserved.</div>
-            <div className="flex gap-3 text-muted-foreground">
-              <a href="#" aria-label="Twitter" className="hover:text-foreground transition"><Twitter className="h-4 w-4" /></a>
-              <a href="#" aria-label="GitHub" className="hover:text-foreground transition"><Github className="h-4 w-4" /></a>
-              <a href="#" aria-label="LinkedIn" className="hover:text-foreground transition"><Linkedin className="h-4 w-4" /></a>
+
+          {/* Col 2: IT & Tech Specializations */}
+          <div className="md:col-span-3">
+            <h4 className="font-mono text-xs font-black uppercase tracking-widest text-[#121212] mb-4 pb-1 border-b-2 border-[#121212]">
+              TECH SECTOR (SCHOLARSYNC)
+            </h4>
+            <ul className="space-y-2 font-mono text-xs font-bold text-[#4A4A4A]">
+              <li>
+                <Link to="/tech" className="hover:text-[#D02020] transition">
+                  → All IT Roles Directory
+                </Link>
+              </li>
+              <li>
+                <a href="/tech#compare" className="hover:text-[#D02020] transition">
+                  → Head-to-Head Compare
+                </a>
+              </li>
+              <li>
+                <a href="/tech#skills" className="hover:text-[#D02020] transition">
+                  → Skill Dependency Tree
+                </a>
+              </li>
+              <li>
+                <Link to="/tech" className="hover:text-[#D02020] transition">
+                  → Portfolio Deliverables
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Col 3: Modules */}
+          <div className="md:col-span-2">
+            <h4 className="font-mono text-xs font-black uppercase tracking-widest text-[#121212] mb-4 pb-1 border-b-2 border-[#121212]">
+              PLATFORM
+            </h4>
+            <ul className="space-y-2 font-mono text-xs font-bold text-[#4A4A4A]">
+              <li>
+                <Link to="/dashboard/mentor" className="hover:text-[#D02020] transition">
+                  AI Mentor
+                </Link>
+              </li>
+              <li>
+                <Link to="/dashboard/roadmaps" className="hover:text-[#D02020] transition">
+                  Roadmaps
+                </Link>
+              </li>
+              <li>
+                <Link to="/dashboard/resume" className="hover:text-[#D02020] transition">
+                  Resume Scanner
+                </Link>
+              </li>
+              <li>
+                <Link to="/dashboard/jobs" className="hover:text-[#D02020] transition">
+                  Live Job Feeds
+                </Link>
+              </li>
+              <li>
+                <Link to="/dashboard/quiz" className="hover:text-[#D02020] transition">
+                  Career Quiz
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Col 4: Community */}
+          <div className="md:col-span-2">
+            <h4 className="font-mono text-xs font-black uppercase tracking-widest text-[#121212] mb-4 pb-1 border-b-2 border-[#121212]">
+              DISPATCH
+            </h4>
+            <ul className="space-y-2 font-mono text-xs font-bold text-[#4A4A4A]">
+              <li>
+                <a
+                  href="https://github.com/muzafer26/CareerNova-AI"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-[#D02020] transition"
+                >
+                  GitHub Repository
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/muzafer26/ScholarSync"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-[#D02020] transition"
+                >
+                  ScholarSync Core
+                </a>
+              </li>
+              <li>
+                <Link to="/signup" className="hover:text-[#D02020] transition">
+                  Join Free
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs font-bold text-[#4A4A4A]">
+          <div>© {new Date().getFullYear()} CAREERNOVA × SCHOLARSYNC. FORM FOLLOWS FUNCTION.</div>
+          <div className="flex items-center gap-4">
+            <span className="text-[#121212] font-black uppercase">BAUHAUS EDITION</span>
+            <div className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-[#D02020]" />
+              <span className="w-2 h-2 bg-[#1040C0]" />
+              <span className="w-2 h-2 clip-triangle bg-[#F0C020]" />
             </div>
           </div>
         </div>
